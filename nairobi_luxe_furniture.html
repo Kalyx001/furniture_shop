@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nairobi Luxe Furniture – Crafted for Your Space</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --black: #1a1612;
+    --dark-brown: #2c2118;
+    --mid-brown: #6b4f3a;
+    --wood: #c4915a;
+    --wood-light: #e8c99a;
+    --gold: #b8936a;
+    --border: #e0d5c5;
+    --text-muted: #8a7968;
+    --whatsapp: #25D366;
+    --whatsapp-dark: #1da851;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(250,248,244,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600;
+    color: var(--dark-brown); letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--mid-brown);
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--whatsapp); color: #fff;
+    border: none; padding: 0.6rem 1.4rem;
+    border-radius: 2rem; font-size: 0.82rem; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+    text-decoration: none; transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--whatsapp-dark); transform: translateY(-1px); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--dark-brown); display: block; transition: 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; top: 68px; left: 0; right: 0;
+    background: var(--warm-white); padding: 1.5rem 5%;
+    border-bottom: 1px solid var(--border); z-index: 999;
+    flex-direction: column; gap: 1.2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { text-decoration: none; color: var(--mid-brown); font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding-top: 68px;
+  }
+  .hero-left {
+    padding: 8% 6% 8% 8%;
+    display: flex; flex-direction: column; justify-content: center;
+    background: var(--cream);
+  }
+  .hero-tag {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 300; line-height: 1.05;
+    color: var(--dark-brown); margin-bottom: 1.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-subtitle {
+    font-size: 1rem; line-height: 1.7; color: var(--text-muted);
+    max-width: 400px; margin-bottom: 2.5rem; font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-wa {
+    background: var(--whatsapp); color: #fff;
+    padding: 0.9rem 2rem; border-radius: 2rem;
+    text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    display: flex; align-items: center; gap: 0.6rem;
+    transition: all 0.25s; box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  }
+  .btn-wa:hover { background: var(--whatsapp-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.4); }
+  .btn-outline {
+    background: transparent; color: var(--dark-brown);
+    padding: 0.9rem 2rem; border-radius: 2rem;
+    text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    border: 1.5px solid var(--wood-light);
+    transition: all 0.25s;
+  }
+  .btn-outline:hover { background: var(--dark-brown); color: var(--cream); border-color: var(--dark-brown); }
+  .hero-stats {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    padding-top: 2rem; border-top: 1px solid var(--border);
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600; color: var(--dark-brown);
+  }
+  .stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .hero-right {
+    position: relative; overflow: hidden;
+    background: var(--dark-brown);
+  }
+  .hero-img-main {
+    width: 100%; height: 100%; object-fit: cover; opacity: 0.85;
+    transition: transform 8s ease;
+  }
+  .hero-right:hover .hero-img-main { transform: scale(1.03); }
+  .hero-badge {
+    position: absolute; bottom: 2.5rem; left: 2rem;
+    background: rgba(250,248,244,0.95); backdrop-filter: blur(8px);
+    padding: 1rem 1.4rem; border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .badge-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .badge-val { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--dark-brown); font-weight: 600; }
+
+  /* ── SECTION WRAPPER ── */
+  section { padding: 6rem 8%; }
+  .section-tag {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 300; color: var(--dark-brown); line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .section-subtitle { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; max-width: 520px; font-weight: 300; }
+
+  /* ── CATEGORIES ── */
+  #catalog { background: var(--cream); }
+  .categories-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 1rem; margin-top: 3rem;
+  }
+  .cat-card {
+    background: var(--warm-white); border-radius: 12px;
+    overflow: hidden; cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid var(--border);
+  }
+  .cat-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(44,33,24,0.12); }
+  .cat-card.active { border-color: var(--gold); }
+  .cat-img {
+    width: 100%; aspect-ratio: 1/1; object-fit: cover;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+  }
+  .cat-name {
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem; font-weight: 500; color: var(--dark-brown);
+    text-align: center; letter-spacing: 0.04em;
+  }
+
+  /* ── PRODUCTS ── */
+  .products-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .products-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.8rem;
+  }
+  .product-card {
+    background: #fff; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); transition: all 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(44,33,24,0.1); }
+  .product-img-wrap {
+    position: relative; overflow: hidden;
+    background: var(--cream); aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+  }
+  .product-badge-new {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--gold); color: #fff;
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: 2rem;
+  }
+  .product-badge-hot {
+    position: absolute; top: 1rem; left: 1rem;
+    background: #e05c2c; color: #fff;
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: 2rem;
+  }
+  .product-body { padding: 1.2rem 1.3rem; flex: 1; display: flex; flex-direction: column; }
+  .product-cat { font-size: 0.68rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; color: var(--dark-brown);
+    margin: 0.3rem 0 0.5rem; font-weight: 400;
+  }
+  .product-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; flex: 1; }
+  .product-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+  .product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600; color: var(--dark-brown);
+  }
+  .product-price small { font-size: 0.75rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+  .btn-ask {
+    background: var(--whatsapp); color: #fff;
+    border: none; padding: 0.55rem 1.1rem; border-radius: 2rem;
+    font-size: 0.78rem; font-weight: 500; cursor: pointer;
+    display: flex; align-items: center; gap: 0.4rem;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-ask:hover { background: var(--whatsapp-dark); transform: scale(1.04); }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+    align-items: center;
+  }
+  .about-img-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .about-img {
+    border-radius: 12px; overflow: hidden; aspect-ratio: 1/1;
+    background: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 3rem;
+  }
+  .about-img:first-child { grid-column: 1/-1; aspect-ratio: 16/9; }
+  .trust-items { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+  .trust-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .trust-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+  .trust-text h4 { font-size: 0.9rem; font-weight: 500; color: var(--dark-brown); margin-bottom: 0.2rem; }
+  .trust-text p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; font-weight: 300; }
+
+  /* ── DELIVERY ── */
+  #delivery { background: var(--dark-brown); color: var(--cream); }
+  #delivery .section-title { color: var(--cream); }
+  #delivery .section-tag { color: var(--wood-light); }
+  #delivery .section-tag::before { background: var(--wood-light); }
+  #delivery .section-subtitle { color: rgba(245,240,232,0.7); }
+  .delivery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+  .delivery-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 2rem;
+  }
+  .delivery-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .delivery-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 400; margin-bottom: 0.5rem; color: var(--wood-light); }
+  .delivery-card p { font-size: 0.82rem; color: rgba(245,240,232,0.65); line-height: 1.65; font-weight: 300; }
+  .delivery-zones { margin-top: 3rem; }
+  .delivery-zones h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
+    color: var(--wood-light); margin-bottom: 1.2rem;
+  }
+  .zone-table { width: 100%; border-collapse: collapse; }
+  .zone-table th, .zone-table td {
+    padding: 0.9rem 1.2rem; text-align: left; font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .zone-table th { color: var(--wood-light); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.72rem; }
+  .zone-table td { color: rgba(245,240,232,0.8); font-weight: 300; }
+  .free-tag { color: var(--whatsapp); font-weight: 500; }
+
+  /* ── REVIEWS ── */
+  #reviews { background: var(--cream); }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+  .review-card {
+    background: var(--warm-white); border-radius: 16px; padding: 1.8rem;
+    border: 1px solid var(--border);
+  }
+  .stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .review-text { font-size: 0.88rem; color: var(--mid-brown); line-height: 1.7; font-weight: 300; font-style: italic; margin-bottom: 1.2rem; }
+  .reviewer { display: flex; align-items: center; gap: 0.8rem; }
+  .reviewer-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--wood-light); display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; font-weight: 600; color: var(--dark-brown);
+  }
+  .reviewer-name { font-size: 0.85rem; font-weight: 500; color: var(--dark-brown); }
+  .reviewer-loc { font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ── CONTACT ── */
+  #contact { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .contact-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+  .contact-item h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.2rem; }
+  .contact-item p, .contact-item a { font-size: 0.95rem; color: var(--dark-brown); text-decoration: none; font-weight: 400; }
+  .map-placeholder {
+    border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
+    height: 380px; background: var(--cream);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem;
+  }
+  .map-placeholder .map-icon { font-size: 3rem; }
+  .map-placeholder p { font-size: 0.85rem; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 220px; }
+  .map-btn {
+    background: var(--dark-brown); color: var(--cream);
+    padding: 0.7rem 1.5rem; border-radius: 2rem; font-size: 0.82rem;
+    text-decoration: none; transition: all 0.2s; font-weight: 500;
+  }
+  .map-btn:hover { background: var(--gold); }
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: var(--whatsapp); display: flex; align-items: center;
+    justify-content: center; font-size: 1.6rem; box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    text-decoration: none; cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: wa-pulse 2.5s ease-in-out infinite;
+  }
+  .wa-float:hover { transform: scale(1.12); box-shadow: 0 10px 35px rgba(37,211,102,0.55); }
+  @keyframes wa-pulse {
+    0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
+    50% { box-shadow: 0 6px 32px rgba(37,211,102,0.7), 0 0 0 10px rgba(37,211,102,0.08); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black); color: rgba(245,240,232,0.7);
+    padding: 3rem 8%; text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+    color: var(--warm-white); margin-bottom: 0.5rem;
+  }
+  .footer-logo span { color: var(--gold); }
+  footer p { font-size: 0.82rem; line-height: 1.7; font-weight: 300; }
+  .footer-links { display: flex; gap: 2rem; justify-content: center; margin: 1.2rem 0; flex-wrap: wrap; }
+  .footer-links a { color: rgba(245,240,232,0.6); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .products-grid { grid-template-columns: repeat(3,1fr); }
+    .categories-grid { grid-template-columns: repeat(3,1fr); }
+  }
+  @media (max-width: 900px) {
+    nav .nav-links { display: none; }
+    nav .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    #home { grid-template-columns: 1fr; }
+    .hero-right { min-height: 45vw; }
+    .hero-left { padding: 4rem 5% 3rem; }
+    #about { grid-template-columns: 1fr; gap: 2.5rem; }
+    #contact { grid-template-columns: 1fr; gap: 2.5rem; }
+    .delivery-grid { grid-template-columns: 1fr 1fr; }
+    .reviews-grid { grid-template-columns: 1fr 1fr; }
+    .products-grid { grid-template-columns: repeat(2,1fr); }
+    .categories-grid { grid-template-columns: repeat(3,1fr); }
+    section { padding: 4rem 5%; }
+  }
+  @media (max-width: 600px) {
+    .hero-stats { gap: 1.2rem; }
+    .products-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .delivery-grid { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: repeat(2,1fr); }
+    .hero-title { font-size: 2.4rem; }
+  }
+
+  /* Fade-in animation */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Nairobi <span>Luxe</span> Furniture</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#catalog">Catalog</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#delivery">Delivery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="https://wa.me/254700000000?text=Hi%2C+I%27m+interested+in+your+furniture%21" target="_blank">
+    <span>💬</span> WhatsApp Us
+  </a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="closeMenu()">Home</a>
+  <a href="#catalog" onclick="closeMenu()">Catalog</a>
+  <a href="#about" onclick="closeMenu()">About Us</a>
+  <a href="#delivery" onclick="closeMenu()">Delivery Info</a>
+  <a href="#reviews" onclick="closeMenu()">Reviews</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="https://wa.me/254700000000" target="_blank" style="color:#25D366;font-weight:500;">💬 WhatsApp Us</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-left">
+    <div class="hero-tag">Nairobi's Premier Furniture</div>
+    <h1 class="hero-title">
+      Crafted for the<br>
+      <em>Modern</em> Home
+    </h1>
+    <p class="hero-subtitle">
+      Premium sofas, beds, dining sets & office furniture — handpicked for Kenyan homes. Custom orders welcome. Same-week delivery across Nairobi.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+I%27d+like+to+browse+your+furniture+collection%21" target="_blank">
+        💬 Order on WhatsApp
+      </a>
+      <a class="btn-outline" href="#catalog">View Catalog</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8yr</div>
+        <div class="stat-label">In Business</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">47</div>
+        <div class="stat-label">Counties Served</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#2c2118 0%,#6b4f3a 50%,#c4915a 100%);display:flex;align-items:center;justify-content:center;">
+      <div style="text-align:center;color:rgba(245,240,232,0.9);">
+        <div style="font-size:7rem;margin-bottom:1rem;">🛋️</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;letter-spacing:0.05em;">Premium Furnishings</div>
+        <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);margin-top:0.5rem;letter-spacing:0.1em;">SINCE 2016</div>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="badge-label">Best Seller</div>
+      <div class="badge-val">Milano L-Sofa — from KES 45,000</div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section id="catalog">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+    <div>
+      <div class="section-tag">Our Collection</div>
+      <h2 class="section-title">Browse by Category</h2>
+    </div>
+    <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+please+send+me+your+full+catalogue%21" target="_blank">
+      💬 Get Full Catalogue
+    </a>
+  </div>
+
+  <div class="categories-grid" id="catGrid">
+    <div class="cat-card active" onclick="filterProducts('sofas', this)">
+      <div class="cat-img">🛋️</div>
+      <div class="cat-name">Sofas</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('beds', this)">
+      <div class="cat-img">🛏️</div>
+      <div class="cat-name">Beds</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('dining', this)">
+      <div class="cat-img">🍽️</div>
+      <div class="cat-name">Dining Tables</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('office', this)">
+      <div class="cat-img">💼</div>
+      <div class="cat-name">Office Furniture</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('tvstands', this)">
+      <div class="cat-img">📺</div>
+      <div class="cat-name">TV Stands</div>
+    </div>
+  </div>
+
+  <div class="products-header" style="margin-top:3rem;">
+    <div>
+      <div class="section-tag" id="activeCategory">Sofas</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--dark-brown);">Featured Pieces</h3>
+    </div>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+    <!-- Products injected by JS -->
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-grid fade-up">
+    <div class="about-img" style="background:linear-gradient(135deg,#e8c99a,#c4915a);font-size:5rem;">🏪</div>
+    <div class="about-img">🪑</div>
+    <div class="about-img">🔨</div>
+  </div>
+  <div class="fade-up">
+    <div class="section-tag">Our Story</div>
+    <h2 class="section-title">Furniture Built<br>for Kenyan Homes</h2>
+    <p class="section-subtitle">
+      Since 2016, Nairobi Luxe Furniture has been crafting and sourcing premium furniture that balances style with durability. Our showroom in Westlands has served over 500 families across Kenya.
+    </p>
+    <div class="trust-items">
+      <div class="trust-item">
+        <div class="trust-icon">✅</div>
+        <div class="trust-text">
+          <h4>Quality Guaranteed</h4>
+          <p>Every piece comes with a 1-year warranty. We only stock durable, locally-tested materials.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🚚</div>
+        <div class="trust-text">
+          <h4>Nairobi-Wide Delivery</h4>
+          <p>Free delivery within Nairobi CBD & estates. Nationwide delivery available at a fee.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">💳</div>
+        <div class="trust-text">
+          <h4>M-Pesa Accepted</h4>
+          <p>Pay deposit via M-Pesa Paybill. Easy layby options available on select items.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🎨</div>
+        <div class="trust-text">
+          <h4>Custom Orders Welcome</h4>
+          <p>Need a specific colour, size or design? We do custom orders — just WhatsApp us.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY -->
+<section id="delivery">
+  <div class="section-tag">Shipping & Delivery</div>
+  <h2 class="section-title" style="color:var(--cream);">We Deliver Across Kenya</h2>
+  <p class="section-subtitle">Fast, reliable delivery with professional assembly included in Nairobi.</p>
+
+  <div class="delivery-grid">
+    <div class="delivery-card fade-up">
+      <div class="delivery-icon">📦</div>
+      <h3>Same-Day Dispatch</h3>
+      <p>Order before 12pm and we dispatch same day within Nairobi. You'll receive a confirmation call from our driver.</p>
+    </div>
+    <div class="delivery-card fade-up">
+      <div class="delivery-icon">🔧</div>
+      <h3>Free Assembly</h3>
+      <p>Our team assembles all furniture in your home at no extra charge — Nairobi deliveries only.</p>
+    </div>
+    <div class="delivery-card fade-up">
+      <div class="delivery-icon">🛡️</div>
+      <h3>Insured Transport</h3>
+      <p>All furniture is wrapped, insured and handled with care. Any damage during transit is replaced free.</p>
+    </div>
+  </div>
+
+  <div class="delivery-zones" style="margin-top:3rem;">
+    <h3>Delivery Zones & Costs</h3>
+    <table class="zone-table">
+      <thead>
+        <tr><th>Location</th><th>Delivery Time</th><th>Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Nairobi CBD & Estates</td><td>Same day – 1 day</td><td class="free-tag">FREE</td></tr>
+        <tr><td>Nairobi Outskirts (Thika, Kiambu, Ngong)</td><td>1–2 days</td><td>From KES 500</td></tr>
+        <tr><td>Other Counties (Mombasa, Kisumu, Nakuru)</td><td>2–4 days</td><td>Negotiable — WhatsApp us</td></tr>
+        <tr><td>Custom / Remote Areas</td><td>TBD</td><td>Contact us for quote</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:2.5rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center;">
+    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:1.2rem 2rem;">
+      <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--wood-light);margin-bottom:0.3rem;">M-Pesa Paybill</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--cream);font-weight:400;">522 533</div>
+      <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);">Account: Your Phone Number</div>
+    </div>
+    <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+I+need+a+delivery+quote+for+my+area." target="_blank">
+      💬 Get Delivery Quote
+    </a>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-tag">Testimonials</div>
+  <h2 class="section-title">What Our Customers Say</h2>
+  <p class="section-subtitle">Real reviews from real Kenyan homes.</p>
+
+  <div class="reviews-grid" style="margin-top:2.5rem;">
+    <div class="review-card fade-up">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Best furniture I've ever bought in Nairobi. The Milano sofa is exactly as shown — excellent quality and delivery was on time. Will definitely order again!"</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">A</div>
+        <div>
+          <div class="reviewer-name">Amina Wanjiku</div>
+          <div class="reviewer-loc">Kilimani, Nairobi</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card fade-up">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"I ordered a custom dining set and they delivered exactly what I wanted. The WhatsApp communication was smooth and pricing was very fair. Highly recommended!"</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">D</div>
+        <div>
+          <div class="reviewer-name">David Otieno</div>
+          <div class="reviewer-loc">Westlands, Nairobi</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card fade-up">
+      <div class="stars">★★★★☆</div>
+      <p class="review-text">"The office desk and chair set is sturdy and looks great. They assembled it in my home office — very professional team. Will order the TV stand next month."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">F</div>
+        <div>
+          <div class="reviewer-name">Faith Kimani</div>
+          <div class="reviewer-loc">South B, Nairobi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="fade-up">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">Visit Our Showroom<br>or Chat With Us</h2>
+    <p class="section-subtitle">Our team is available 7 days a week to help you find the perfect furniture.</p>
+
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">💬</div>
+        <div>
+          <h4>WhatsApp</h4>
+          <a href="https://wa.me/254700000000" target="_blank">+254 700 000 000</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <h4>Phone</h4>
+          <a href="tel:+254700000000">+254 700 000 000</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4>Showroom</h4>
+          <p>Westlands Square, Ring Road, Nairobi<br>1st Floor, Unit 12</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <h4>Opening Hours</h4>
+          <p>Mon–Sat: 8am – 7pm<br>Sunday: 10am – 5pm</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+      <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+I%27d+like+to+visit+your+showroom.+When+is+the+best+time%3F" target="_blank">
+        💬 Book Showroom Visit
+      </a>
+      <a class="btn-outline" href="tel:+254700000000">📞 Call Us</a>
+    </div>
+  </div>
+
+  <div class="map-placeholder fade-up">
+    <div class="map-icon">📍</div>
+    <p>Westlands Square, Ring Road Westlands<br>Nairobi, Kenya<br><br>1st Floor, Unit 12</p>
+    <a class="map-btn" href="https://maps.google.com/?q=Westlands+Square+Nairobi" target="_blank">Open in Google Maps</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Nairobi <span>Luxe</span> Furniture</div>
+  <p>Premium furniture crafted for Kenyan homes. Showroom in Westlands, Nairobi.</p>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#catalog">Catalog</a>
+    <a href="#about">About</a>
+    <a href="#delivery">Delivery</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Nairobi Luxe Furniture. All rights reserved. | Westlands, Nairobi, Kenya</p>
+  </div>
+</footer>
+
+<!-- WhatsApp Float Button -->
+<a class="wa-float" href="https://wa.me/254700000000?text=Hi%2C+I%27m+interested+in+your+furniture%21" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<script>
+const products = {
+  sofas: [
+    { name:"Milano L-Shaped Sofa", cat:"Sofas", price:"KES 45,000", desc:"5-seater L-sofa in premium fabric. Available in grey, beige & chocolate brown.", badge:"hot", icon:"🛋️" },
+    { name:"Monaco 3-Seater", cat:"Sofas", price:"KES 28,500", desc:"Classic 3-seater with high-density foam. Stain-resistant upholstery.", badge:"", icon:"🛋️" },
+    { name:"Serengeti Corner Sofa", cat:"Sofas", price:"KES 62,000", desc:"Luxury corner unit with chaise. Linen fabric, solid wood legs.", badge:"new", icon:"🛋️" },
+    { name:"Urban 2-Seater Loveseat", cat:"Sofas", price:"KES 18,000", desc:"Compact loveseat perfect for studio apartments. Multiple colours.", badge:"", icon:"🛋️" },
+  ],
+  beds: [
+    { name:"Royal King Bed Frame", cat:"Beds", price:"KES 38,000", desc:"Solid mahogany king bed with upholstered headboard. Timeless design.", badge:"hot", icon:"🛏️" },
+    { name:"Haven Queen Platform Bed", cat:"Beds", price:"KES 29,500", desc:"Low-profile queen bed with integrated storage drawers underneath.", badge:"new", icon:"🛏️" },
+    { name:"Dream Single Bed", cat:"Beds", price:"KES 14,000", desc:"Single bed with pinewood frame. Great for children's rooms.", badge:"", icon:"🛏️" },
+    { name:"Loft Bunk Bed", cat:"Beds", price:"KES 24,000", desc:"Space-saving bunk bed. Safety rails included. Assembly provided.", badge:"", icon:"🛏️" },
+  ],
+  dining: [
+    { name:"Acacia 6-Seater Dining Set", cat:"Dining", price:"KES 55,000", desc:"Solid acacia wood table with 6 padded chairs. Indoor & outdoor use.", badge:"hot", icon:"🍽️" },
+    { name:"Glass Top 4-Seater Table", cat:"Dining", price:"KES 32,000", desc:"Tempered glass dining table. Modern minimalist aesthetic.", badge:"new", icon:"🍽️" },
+    { name:"Rustic Farm Table", cat:"Dining", price:"KES 48,000", desc:"8-seater reclaimed wood farm table. Unique grain patterns.", badge:"", icon:"🍽️" },
+    { name:"Compact 2-Seater Set", cat:"Dining", price:"KES 12,500", desc:"Perfect for studio apartments. Foldable design for easy storage.", badge:"", icon:"🍽️" },
+  ],
+  office: [
+    { name:"Executive L-Desk", cat:"Office", price:"KES 42,000", desc:"L-shaped executive desk with drawers. MDF with walnut finish.", badge:"new", icon:"💼" },
+    { name:"Ergonomic Manager Chair", cat:"Office", price:"KES 16,500", desc:"Lumbar support, adjustable height, mesh back. Imported.", badge:"hot", icon:"🪑" },
+    { name:"Home Office Desk", cat:"Office", price:"KES 14,000", desc:"Minimalist work-from-home desk. Cable management built in.", badge:"", icon:"💼" },
+    { name:"3-Door File Cabinet", cat:"Office", price:"KES 18,000", desc:"Steel filing cabinet with key lock. A4 and foolscap compatible.", badge:"", icon:"🗄️" },
+  ],
+  tvstands: [
+    { name:"Floating Walnut TV Unit", cat:"TV Stands", price:"KES 22,000", desc:"Wall-mounted TV unit. Holds up to 65". Three open shelves.", badge:"hot", icon:"📺" },
+    { name:"Corner TV Stand", cat:"TV Stands", price:"KES 14,500", desc:"Space-saving corner unit. Two cable management holes.", badge:"new", icon:"📺" },
+    { name:"Classic Sideboard Unit", cat:"TV Stands", price:"KES 28,000", desc:"Multipurpose sideboard — TV stand + storage. 1.8m wide.", badge:"", icon:"📺" },
+    { name:"Minimalist TV Console", cat:"TV Stands", price:"KES 17,000", desc:"Simple, low-profile console. Matte black or oak finish.", badge:"", icon:"📺" },
+  ],
+};
+
+let currentCat = 'sofas';
+
+function renderProducts(cat) {
+  const grid = document.getElementById('productsGrid');
+  const label = document.getElementById('activeCategory');
+  const items = products[cat];
+  const catNames = { sofas:'Sofas', beds:'Beds', dining:'Dining Tables', office:'Office Furniture', tvstands:'TV Stands' };
+  label.textContent = catNames[cat];
+
+  grid.innerHTML = items.map(p => {
+    const msg = encodeURIComponent(`Hi, I'm interested in the ${p.name} (${p.price}). Please share more details.`);
+    const badge = p.badge === 'new'
+      ? `<div class="product-badge-new">New</div>`
+      : p.badge === 'hot'
+      ? `<div class="product-badge-hot">🔥 Popular</div>`
+      : '';
+    return `
+      <div class="product-card fade-up visible">
+        <div class="product-img-wrap">
+          <span style="font-size:4rem">${p.icon}</span>
+          ${badge}
+        </div>
+        <div class="product-body">
+          <div class="product-cat">${p.cat}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-footer">
+            <div class="product-price">${p.price} <small>/ piece</small></div>
+            <button class="btn-ask" onclick="askPrice('${p.name}','${p.price}')">
+              💬 Ask Price
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function askPrice(name, price) {
+  const msg = encodeURIComponent(`Hi, I'm interested in the ${name} (${price}). Could you please share more details and confirm availability?`);
+  window.open(`https://wa.me/254700000000?text=${msg}`, '_blank');
+}
+
+function filterProducts(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts(cat);
+}
+
+// Init
+renderProducts('sofas');
+
+// Mobile menu
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// Dynamic fade-up observe for product cards
+const mutObs = new MutationObserver(() => {
+  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => obs.observe(el));
+});
+mutObs.observe(document.getElementById('productsGrid'), { childList: true });
+</script>
+</body>
+</html>
