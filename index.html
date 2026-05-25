@@ -4,587 +4,746 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nairobi Luxe Furniture – Crafted for Your Space</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #f5f0e8;
-    --warm-white: #faf8f4;
-    --black: #1a1612;
-    --dark-brown: #2c2118;
-    --mid-brown: #6b4f3a;
-    --wood: #c4915a;
-    --wood-light: #e8c99a;
-    --gold: #b8936a;
-    --border: #e0d5c5;
-    --text-muted: #8a7968;
-    --whatsapp: #25D366;
-    --whatsapp-dark: #1da851;
-  }
+:root {
+  --cream:#f5f0e8; --warm-white:#faf8f4; --black:#1a1612;
+  --dark-brown:#2c2118; --mid-brown:#6b4f3a; --wood:#c4915a;
+  --wood-light:#e8c99a; --gold:#b8936a; --border:#e0d5c5;
+  --text-muted:#8a7968; --whatsapp:#25D366; --whatsapp-dark:#1da851;
+  --admin-bg:#0f0d0b; --admin-card:#1e1a16; --admin-border:#3a3028;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--warm-white);color:var(--black);overflow-x:hidden}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ─── PRELOADER ─── */
+#preloader{position:fixed;inset:0;background:var(--dark-brown);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;transition:opacity 0.6s,visibility 0.6s}
+#preloader.hide{opacity:0;visibility:hidden}
+.pre-logo{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--cream);font-weight:300;letter-spacing:0.08em;animation:preFade 0.8s ease forwards}
+.pre-bar{width:200px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.pre-fill{height:100%;background:var(--gold);border-radius:2px;animation:preLoad 1.8s ease forwards}
+@keyframes preFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes preLoad{from{width:0}to{width:100%}}
 
-  html { scroll-behavior: smooth; }
+/* ─── CURSOR ─── */
+.cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.1s;mix-blend-mode:multiply}
+.cursor-ring{position:fixed;width:38px;height:38px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:left 0.12s ease,top 0.12s ease,width 0.3s,height 0.3s,opacity 0.3s;opacity:0.6}
+@media(max-width:900px){.cursor,.cursor-ring{display:none}}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--warm-white);
-    color: var(--black);
-    overflow-x: hidden;
-  }
+/* ─── ANNOUNCEMENT BAR ─── */
+.announce-bar{background:var(--dark-brown);color:var(--wood-light);padding:0.5rem;text-align:center;font-size:0.78rem;letter-spacing:0.08em;overflow:hidden;position:relative}
+.announce-inner{display:flex;gap:4rem;width:max-content;animation:marquee 22s linear infinite}
+.announce-inner span{white-space:nowrap}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 5%;
-    background: rgba(250,248,244,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.3s;
-  }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem; font-weight: 600;
-    color: var(--dark-brown); letter-spacing: 0.02em;
-  }
-  .nav-logo span { color: var(--gold); }
-  .nav-links {
-    display: flex; gap: 2.5rem; list-style: none;
-  }
-  .nav-links a {
-    text-decoration: none; color: var(--mid-brown);
-    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em;
-    text-transform: uppercase; transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-  .nav-cta {
-    background: var(--whatsapp); color: #fff;
-    border: none; padding: 0.6rem 1.4rem;
-    border-radius: 2rem; font-size: 0.82rem; font-weight: 500;
-    cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
-    text-decoration: none; transition: background 0.2s, transform 0.2s;
-  }
-  .nav-cta:hover { background: var(--whatsapp-dark); transform: translateY(-1px); }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-  .hamburger span { width: 24px; height: 2px; background: var(--dark-brown); display: block; transition: 0.3s; }
-  .mobile-menu {
-    display: none; position: fixed; top: 68px; left: 0; right: 0;
-    background: var(--warm-white); padding: 1.5rem 5%;
-    border-bottom: 1px solid var(--border); z-index: 999;
-    flex-direction: column; gap: 1.2rem;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { text-decoration: none; color: var(--mid-brown); font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+/* ─── NAV ─── */
+nav{position:fixed;top:32px;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(250,248,244,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:all 0.4s}
+nav.scrolled{top:0;box-shadow:0 4px 30px rgba(44,33,24,0.08)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--dark-brown);letter-spacing:0.02em;cursor:pointer}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--mid-brown);font-size:0.82rem;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;transition:color 0.2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--gold);transition:width 0.3s}
+.nav-links a:hover::after{width:100%}
+.nav-links a:hover{color:var(--gold)}
+.nav-right{display:flex;gap:0.8rem;align-items:center}
+.btn-admin{background:transparent;border:1px solid var(--border);color:var(--mid-brown);padding:0.5rem 1rem;border-radius:2rem;font-size:0.78rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-admin:hover{background:var(--dark-brown);color:var(--cream);border-color:var(--dark-brown)}
+.nav-cta{background:var(--whatsapp);color:#fff;border:none;padding:0.6rem 1.3rem;border-radius:2rem;font-size:0.82rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:0.5rem;text-decoration:none;transition:all 0.25s}
+.nav-cta:hover{background:var(--whatsapp-dark);transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,211,102,0.35)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:24px;height:2px;background:var(--dark-brown);display:block;transition:0.3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--dark-brown);z-index:998;flex-direction:column;justify-content:center;padding:3rem 8%;gap:2rem;transition:all 0.4s}
+.mobile-menu.open{display:flex}
+.mobile-menu a{text-decoration:none;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem;transition:color 0.2s}
+.mobile-menu a:hover{color:var(--gold)}
 
-  /* ── HERO ── */
-  #home {
-    min-height: 100vh;
-    display: grid; grid-template-columns: 1fr 1fr;
-    padding-top: 68px;
-  }
-  .hero-left {
-    padding: 8% 6% 8% 8%;
-    display: flex; flex-direction: column; justify-content: center;
-    background: var(--cream);
-  }
-  .hero-tag {
-    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold); font-weight: 500; margin-bottom: 1.2rem;
-    display: flex; align-items: center; gap: 0.8rem;
-  }
-  .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3rem, 5vw, 5.5rem);
-    font-weight: 300; line-height: 1.05;
-    color: var(--dark-brown); margin-bottom: 1.5rem;
-  }
-  .hero-title em { font-style: italic; color: var(--gold); }
-  .hero-subtitle {
-    font-size: 1rem; line-height: 1.7; color: var(--text-muted);
-    max-width: 400px; margin-bottom: 2.5rem; font-weight: 300;
-  }
-  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .btn-wa {
-    background: var(--whatsapp); color: #fff;
-    padding: 0.9rem 2rem; border-radius: 2rem;
-    text-decoration: none; font-size: 0.9rem; font-weight: 500;
-    display: flex; align-items: center; gap: 0.6rem;
-    transition: all 0.25s; box-shadow: 0 4px 20px rgba(37,211,102,0.3);
-  }
-  .btn-wa:hover { background: var(--whatsapp-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.4); }
-  .btn-outline {
-    background: transparent; color: var(--dark-brown);
-    padding: 0.9rem 2rem; border-radius: 2rem;
-    text-decoration: none; font-size: 0.9rem; font-weight: 500;
-    border: 1.5px solid var(--wood-light);
-    transition: all 0.25s;
-  }
-  .btn-outline:hover { background: var(--dark-brown); color: var(--cream); border-color: var(--dark-brown); }
-  .hero-stats {
-    display: flex; gap: 2rem; margin-top: 3rem;
-    padding-top: 2rem; border-top: 1px solid var(--border);
-  }
-  .stat-item { text-align: left; }
-  .stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem; font-weight: 600; color: var(--dark-brown);
-  }
-  .stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-  .hero-right {
-    position: relative; overflow: hidden;
-    background: var(--dark-brown);
-  }
-  .hero-img-main {
-    width: 100%; height: 100%; object-fit: cover; opacity: 0.85;
-    transition: transform 8s ease;
-  }
-  .hero-right:hover .hero-img-main { transform: scale(1.03); }
-  .hero-badge {
-    position: absolute; bottom: 2.5rem; left: 2rem;
-    background: rgba(250,248,244,0.95); backdrop-filter: blur(8px);
-    padding: 1rem 1.4rem; border-radius: 12px;
-    border: 1px solid var(--border);
-  }
-  .badge-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-  .badge-val { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--dark-brown); font-weight: 600; }
+/* ─── HERO SLIDER ─── */
+#home{height:100vh;position:relative;overflow:hidden;margin-top:32px}
+.hero-slide{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;opacity:0;transition:opacity 0.9s ease;pointer-events:none}
+.hero-slide.active{opacity:1;pointer-events:all}
+.hero-left{padding:8% 6% 8% 8%;display:flex;flex-direction:column;justify-content:center;background:var(--cream);position:relative;overflow:hidden}
+.hero-left::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(184,147,106,0.12) 0%,transparent 70%);animation:heroGlow 6s ease-in-out infinite alternate}
+@keyframes heroGlow{from{transform:scale(1) translate(0,0)}to{transform:scale(1.3) translate(-20px,20px)}}
+.hero-tag{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;opacity:0;animation:slideTagIn 0.7s 0.3s ease forwards}
+.hero-slide.active .hero-tag{animation:slideTagIn 0.7s 0.3s ease forwards}
+.hero-tag::before{content:'';width:30px;height:1px;background:var(--gold)}
+@keyframes slideTagIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,4.5vw,5rem);font-weight:300;line-height:1.05;color:var(--dark-brown);margin-bottom:1.5rem;opacity:0;animation:slideTitleIn 0.8s 0.5s ease forwards}
+.hero-slide.active .hero-title{animation:slideTitleIn 0.8s 0.5s ease forwards}
+@keyframes slideTitleIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-subtitle{font-size:0.95rem;line-height:1.75;color:var(--text-muted);max-width:400px;margin-bottom:2.5rem;font-weight:300;opacity:0;animation:slideSubIn 0.8s 0.7s ease forwards}
+.hero-slide.active .hero-subtitle{animation:slideSubIn 0.8s 0.7s ease forwards}
+@keyframes slideSubIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:slideActIn 0.8s 0.9s ease forwards}
+.hero-slide.active .hero-actions{animation:slideActIn 0.8s 0.9s ease forwards}
+@keyframes slideActIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.btn-wa{background:var(--whatsapp);color:#fff;padding:0.9rem 2rem;border-radius:2rem;text-decoration:none;font-size:0.88rem;font-weight:500;display:inline-flex;align-items:center;gap:0.6rem;transition:all 0.25s;box-shadow:0 4px 20px rgba(37,211,102,0.3)}
+.btn-wa:hover{background:var(--whatsapp-dark);transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,211,102,0.45)}
+.btn-outline{background:transparent;color:var(--dark-brown);padding:0.9rem 2rem;border-radius:2rem;text-decoration:none;font-size:0.88rem;font-weight:500;border:1.5px solid var(--wood-light);transition:all 0.25s;display:inline-flex;align-items:center;gap:0.6rem}
+.btn-outline:hover{background:var(--dark-brown);color:var(--cream);border-color:var(--dark-brown)}
+.hero-stats{display:flex;gap:2rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+.stat-item{text-align:left}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--dark-brown);line-height:1}
+.stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem}
+.hero-right{position:relative;overflow:hidden}
+.hero-visual{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;transition:transform 8s ease}
+.hero-slide.active .hero-visual{transform:scale(1.04)}
+.hero-badge{position:absolute;bottom:2.5rem;left:2rem;background:rgba(250,248,244,0.95);backdrop-filter:blur(8px);padding:1rem 1.4rem;border-radius:12px;border:1px solid var(--border);animation:badgeFloat 3s ease-in-out infinite}
+@keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.badge-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em}
+.badge-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--dark-brown);font-weight:600}
+/* Slider dots & arrows */
+.hero-dots{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;gap:0.6rem;z-index:10}
+.hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(44,33,24,0.25);cursor:pointer;transition:all 0.3s}
+.hero-dot.active{background:var(--gold);width:24px;border-radius:4px}
+.hero-arrow{position:absolute;top:50%;z-index:10;background:rgba(250,248,244,0.9);border:1px solid var(--border);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translateY(-50%);transition:all 0.25s;font-size:1.1rem}
+.hero-arrow:hover{background:var(--dark-brown);color:var(--cream)}
+.hero-arrow.prev{left:1.5rem}
+.hero-arrow.next{right:1.5rem}
 
-  /* ── SECTION WRAPPER ── */
-  section { padding: 6rem 8%; }
-  .section-tag {
-    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold); font-weight: 500; margin-bottom: 0.8rem;
-    display: flex; align-items: center; gap: 0.8rem;
-  }
-  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2rem, 3.5vw, 3.2rem);
-    font-weight: 300; color: var(--dark-brown); line-height: 1.15;
-    margin-bottom: 1rem;
-  }
-  .section-subtitle { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; max-width: 520px; font-weight: 300; }
+/* ─── FEATURES STRIP ─── */
+.features-strip{background:var(--dark-brown);padding:1.2rem 5%;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+.feat-item{display:flex;align-items:center;gap:0.7rem;color:var(--wood-light)}
+.feat-item span.ico{font-size:1.2rem}
+.feat-item p{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:500}
 
-  /* ── CATEGORIES ── */
-  #catalog { background: var(--cream); }
-  .categories-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 1rem; margin-top: 3rem;
-  }
-  .cat-card {
-    background: var(--warm-white); border-radius: 12px;
-    overflow: hidden; cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid var(--border);
-  }
-  .cat-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(44,33,24,0.12); }
-  .cat-card.active { border-color: var(--gold); }
-  .cat-img {
-    width: 100%; aspect-ratio: 1/1; object-fit: cover;
-    background: var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem;
-  }
-  .cat-name {
-    padding: 0.8rem 1rem;
-    font-size: 0.82rem; font-weight: 500; color: var(--dark-brown);
-    text-align: center; letter-spacing: 0.04em;
-  }
+/* ─── SECTION BASE ─── */
+section.content{padding:6rem 8%}
+.section-tag{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem}
+.section-tag::before{content:'';width:24px;height:1px;background:var(--gold)}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.2vw,3.2rem);font-weight:300;color:var(--dark-brown);line-height:1.15;margin-bottom:0.8rem}
+.section-subtitle{color:var(--text-muted);font-size:0.92rem;line-height:1.75;max-width:520px;font-weight:300}
 
-  /* ── PRODUCTS ── */
-  .products-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
-  }
-  .products-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1.8rem;
-  }
-  .product-card {
-    background: #fff; border-radius: 16px; overflow: hidden;
-    border: 1px solid var(--border); transition: all 0.3s;
-    display: flex; flex-direction: column;
-  }
-  .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(44,33,24,0.1); }
-  .product-img-wrap {
-    position: relative; overflow: hidden;
-    background: var(--cream); aspect-ratio: 4/3;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 4rem;
-  }
-  .product-badge-new {
-    position: absolute; top: 1rem; left: 1rem;
-    background: var(--gold); color: #fff;
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: 2rem;
-  }
-  .product-badge-hot {
-    position: absolute; top: 1rem; left: 1rem;
-    background: #e05c2c; color: #fff;
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: 2rem;
-  }
-  .product-body { padding: 1.2rem 1.3rem; flex: 1; display: flex; flex-direction: column; }
-  .product-cat { font-size: 0.68rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; }
-  .product-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.25rem; color: var(--dark-brown);
-    margin: 0.3rem 0 0.5rem; font-weight: 400;
-  }
-  .product-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; flex: 1; }
-  .product-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border);
-  }
-  .product-price {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem; font-weight: 600; color: var(--dark-brown);
-  }
-  .product-price small { font-size: 0.75rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-weight: 300; }
-  .btn-ask {
-    background: var(--whatsapp); color: #fff;
-    border: none; padding: 0.55rem 1.1rem; border-radius: 2rem;
-    font-size: 0.78rem; font-weight: 500; cursor: pointer;
-    display: flex; align-items: center; gap: 0.4rem;
-    transition: all 0.2s; white-space: nowrap;
-  }
-  .btn-ask:hover { background: var(--whatsapp-dark); transform: scale(1.04); }
+/* ─── PROMO BANNER CAROUSEL ─── */
+#promos{background:var(--cream);padding:4rem 0;overflow:hidden}
+#promos .inner{padding:0 8%;margin-bottom:2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.promo-track-wrap{overflow:hidden;position:relative}
+.promo-track{display:flex;gap:1.5rem;padding:0 8% 1rem;transition:transform 0.5s cubic-bezier(.4,0,.2,1);will-change:transform}
+.promo-card{flex:0 0 340px;border-radius:20px;overflow:hidden;position:relative;cursor:pointer;box-shadow:0 4px 24px rgba(44,33,24,0.08)}
+.promo-card-inner{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;position:relative;overflow:hidden;transition:transform 0.4s}
+.promo-card:hover .promo-card-inner{transform:scale(1.03)}
+.promo-label{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;opacity:0.85}
+.promo-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;text-align:center;line-height:1.2}
+.promo-cta{font-size:0.78rem;padding:0.5rem 1.2rem;border-radius:2rem;background:rgba(255,255,255,0.2);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.35);color:#fff;text-decoration:none;transition:all 0.2s}
+.promo-cta:hover{background:rgba(255,255,255,0.35)}
+.promo-nav{display:flex;gap:0.6rem;justify-content:center;margin-top:1.5rem}
+.promo-dot{width:7px;height:7px;border-radius:50%;background:rgba(44,33,24,0.2);cursor:pointer;transition:all 0.3s}
+.promo-dot.active{background:var(--gold);width:20px;border-radius:3px}
 
-  /* ── ABOUT ── */
-  #about {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
-    align-items: center;
-  }
-  .about-img-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-  }
-  .about-img {
-    border-radius: 12px; overflow: hidden; aspect-ratio: 1/1;
-    background: var(--cream); display: flex; align-items: center;
-    justify-content: center; font-size: 3rem;
-  }
-  .about-img:first-child { grid-column: 1/-1; aspect-ratio: 16/9; }
-  .trust-items { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
-  .trust-item {
-    display: flex; gap: 1rem; align-items: flex-start;
-  }
-  .trust-icon {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--cream); display: flex; align-items: center;
-    justify-content: center; font-size: 1.1rem; flex-shrink: 0;
-    border: 1px solid var(--border);
-  }
-  .trust-text h4 { font-size: 0.9rem; font-weight: 500; color: var(--dark-brown); margin-bottom: 0.2rem; }
-  .trust-text p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; font-weight: 300; }
+/* ─── CATEGORIES ─── */
+#catalog{background:var(--warm-white)}
+.categories-grid{display:flex;gap:0.8rem;flex-wrap:wrap;margin:2rem 0 3rem}
+.cat-pill{padding:0.6rem 1.4rem;border-radius:2rem;border:1.5px solid var(--border);font-size:0.82rem;font-weight:500;color:var(--mid-brown);cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:0.5rem;background:var(--warm-white)}
+.cat-pill:hover{border-color:var(--gold);color:var(--gold)}
+.cat-pill.active{background:var(--dark-brown);color:var(--cream);border-color:var(--dark-brown)}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8rem}
+.product-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--border);transition:all 0.35s;display:flex;flex-direction:column;position:relative}
+.product-card:hover{transform:translateY(-7px);box-shadow:0 24px 60px rgba(44,33,24,0.12)}
+.product-img-wrap{position:relative;overflow:hidden;background:var(--cream);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
+.product-emoji{font-size:4.5rem;transition:transform 0.4s;display:block;line-height:1}
+.product-card:hover .product-emoji{transform:scale(1.15) rotate(-4deg)}
+.product-overlay{position:absolute;inset:0;background:rgba(44,33,24,0.55);opacity:0;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center}
+.product-card:hover .product-overlay{opacity:1}
+.overlay-btn{background:var(--whatsapp);color:#fff;padding:0.6rem 1.4rem;border-radius:2rem;font-size:0.82rem;font-weight:500;text-decoration:none;transform:translateY(10px);transition:transform 0.3s;display:flex;align-items:center;gap:0.5rem}
+.product-card:hover .overlay-btn{transform:translateY(0)}
+.product-badge{position:absolute;top:1rem;left:1rem;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.8rem;border-radius:2rem;color:#fff}
+.badge-new{background:var(--gold)}
+.badge-hot{background:#d4502a}
+.badge-sale{background:#5a8c5a}
+.product-body{padding:1.2rem 1.3rem;flex:1;display:flex;flex-direction:column}
+.product-cat{font-size:0.66rem;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;font-weight:600}
+.product-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--dark-brown);margin:0.3rem 0 0.5rem;font-weight:400}
+.product-desc{font-size:0.79rem;color:var(--text-muted);line-height:1.65;font-weight:300;flex:1}
+.product-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border)}
+.product-price{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--dark-brown)}
+.product-price small{font-size:0.72rem;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:300}
+.btn-ask{background:var(--whatsapp);color:#fff;border:none;padding:0.5rem 1rem;border-radius:2rem;font-size:0.76rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:0.4rem;transition:all 0.2s;white-space:nowrap}
+.btn-ask:hover{background:var(--whatsapp-dark);transform:scale(1.05)}
+.wishlist-btn{position:absolute;top:1rem;right:1rem;width:32px;height:32px;background:rgba(250,248,244,0.9);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;font-size:0.9rem}
+.wishlist-btn:hover{background:var(--cream);transform:scale(1.1)}
+.wishlist-btn.liked{background:var(--gold);color:#fff}
 
-  /* ── DELIVERY ── */
-  #delivery { background: var(--dark-brown); color: var(--cream); }
-  #delivery .section-title { color: var(--cream); }
-  #delivery .section-tag { color: var(--wood-light); }
-  #delivery .section-tag::before { background: var(--wood-light); }
-  #delivery .section-subtitle { color: rgba(245,240,232,0.7); }
-  .delivery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
-  .delivery-card {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px; padding: 2rem;
-  }
-  .delivery-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .delivery-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 400; margin-bottom: 0.5rem; color: var(--wood-light); }
-  .delivery-card p { font-size: 0.82rem; color: rgba(245,240,232,0.65); line-height: 1.65; font-weight: 300; }
-  .delivery-zones { margin-top: 3rem; }
-  .delivery-zones h3 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
-    color: var(--wood-light); margin-bottom: 1.2rem;
-  }
-  .zone-table { width: 100%; border-collapse: collapse; }
-  .zone-table th, .zone-table td {
-    padding: 0.9rem 1.2rem; text-align: left; font-size: 0.85rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-  .zone-table th { color: var(--wood-light); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.72rem; }
-  .zone-table td { color: rgba(245,240,232,0.8); font-weight: 300; }
-  .free-tag { color: var(--whatsapp); font-weight: 500; }
+/* ─── ABOUT ─── */
+#about{background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-visual{position:relative}
+.about-main-img{border-radius:20px;overflow:hidden;background:linear-gradient(135deg,var(--wood-light),var(--wood));aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:6rem}
+.about-float-card{position:absolute;bottom:-1.5rem;right:-1.5rem;background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.3rem 1.6rem;box-shadow:0 8px 40px rgba(44,33,24,0.1)}
+.about-float-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--dark-brown);margin-bottom:0.5rem}
+.about-float-row{display:flex;gap:1.5rem}
+.about-mini-stat .num{font-size:1.5rem;font-weight:600;color:var(--gold);font-family:'Cormorant Garamond',serif}
+.about-mini-stat .lbl{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
+.trust-items{display:flex;flex-direction:column;gap:1.2rem;margin-top:2rem}
+.trust-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border-radius:12px;transition:background 0.25s}
+.trust-item:hover{background:rgba(184,147,106,0.07)}
+.trust-icon{width:42px;height:42px;border-radius:12px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;border:1px solid var(--border)}
+.trust-text h4{font-size:0.9rem;font-weight:600;color:var(--dark-brown);margin-bottom:0.2rem}
+.trust-text p{font-size:0.79rem;color:var(--text-muted);line-height:1.6;font-weight:300}
 
-  /* ── REVIEWS ── */
-  #reviews { background: var(--cream); }
-  .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
-  .review-card {
-    background: var(--warm-white); border-radius: 16px; padding: 1.8rem;
-    border: 1px solid var(--border);
-  }
-  .stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
-  .review-text { font-size: 0.88rem; color: var(--mid-brown); line-height: 1.7; font-weight: 300; font-style: italic; margin-bottom: 1.2rem; }
-  .reviewer { display: flex; align-items: center; gap: 0.8rem; }
-  .reviewer-avatar {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: var(--wood-light); display: flex; align-items: center;
-    justify-content: center; font-size: 1rem; font-weight: 600; color: var(--dark-brown);
-  }
-  .reviewer-name { font-size: 0.85rem; font-weight: 500; color: var(--dark-brown); }
-  .reviewer-loc { font-size: 0.72rem; color: var(--text-muted); }
+/* ─── WHY US ─── */
+#why{background:var(--dark-brown);padding:6rem 8%}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+.why-card{border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:2rem 1.6rem;transition:all 0.3s;cursor:default}
+.why-card:hover{background:rgba(255,255,255,0.05);transform:translateY(-4px);border-color:rgba(184,147,106,0.4)}
+.why-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(184,147,106,0.3);line-height:1;margin-bottom:0.8rem}
+.why-card h3{font-size:1rem;font-weight:600;color:var(--wood-light);margin-bottom:0.6rem}
+.why-card p{font-size:0.82rem;color:rgba(245,240,232,0.55);line-height:1.65;font-weight:300}
 
-  /* ── CONTACT ── */
-  #contact { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
-  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
-  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
-  .contact-icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    background: var(--cream); display: flex; align-items: center;
-    justify-content: center; font-size: 1.2rem; flex-shrink: 0;
-    border: 1px solid var(--border);
-  }
-  .contact-item h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.2rem; }
-  .contact-item p, .contact-item a { font-size: 0.95rem; color: var(--dark-brown); text-decoration: none; font-weight: 400; }
-  .map-placeholder {
-    border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
-    height: 380px; background: var(--cream);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 1rem;
-  }
-  .map-placeholder .map-icon { font-size: 3rem; }
-  .map-placeholder p { font-size: 0.85rem; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 220px; }
-  .map-btn {
-    background: var(--dark-brown); color: var(--cream);
-    padding: 0.7rem 1.5rem; border-radius: 2rem; font-size: 0.82rem;
-    text-decoration: none; transition: all 0.2s; font-weight: 500;
-  }
-  .map-btn:hover { background: var(--gold); }
+/* ─── DELIVERY ─── */
+#delivery{background:var(--warm-white);padding:6rem 8%}
+.delivery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.delivery-card{background:var(--cream);border:1px solid var(--border);border-radius:18px;padding:2rem;transition:all 0.3s}
+.delivery-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(44,33,24,0.1)}
+.delivery-icon{font-size:2.2rem;margin-bottom:1rem}
+.delivery-card h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;color:var(--dark-brown)}
+.delivery-card p{font-size:0.81rem;color:var(--text-muted);line-height:1.65;font-weight:300}
+.zone-table-wrap{margin-top:3rem;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.zone-table{width:100%;border-collapse:collapse}
+.zone-table thead{background:var(--dark-brown)}
+.zone-table th{padding:1rem 1.5rem;text-align:left;font-size:0.72rem;color:var(--wood-light);letter-spacing:0.1em;text-transform:uppercase;font-weight:500}
+.zone-table td{padding:1rem 1.5rem;font-size:0.86rem;color:var(--mid-brown);border-bottom:1px solid var(--border);font-weight:300}
+.zone-table tr:last-child td{border-bottom:none}
+.zone-table tr:hover td{background:var(--cream)}
+.free-tag{color:var(--whatsapp);font-weight:600}
+.mpesa-box{margin-top:2.5rem;background:var(--dark-brown);border-radius:16px;padding:2rem 2.5rem;display:flex;align-items:center;gap:3rem;flex-wrap:wrap}
+.mpesa-label{font-size:0.7rem;color:var(--wood-light);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem}
+.mpesa-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--cream);font-weight:300}
+.mpesa-sub{font-size:0.78rem;color:rgba(245,240,232,0.5)}
 
-  /* ── WHATSAPP FLOAT ── */
-  .wa-float {
-    position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
-    width: 58px; height: 58px; border-radius: 50%;
-    background: var(--whatsapp); display: flex; align-items: center;
-    justify-content: center; font-size: 1.6rem; box-shadow: 0 6px 24px rgba(37,211,102,0.45);
-    text-decoration: none; cursor: pointer;
-    transition: transform 0.25s, box-shadow 0.25s;
-    animation: wa-pulse 2.5s ease-in-out infinite;
-  }
-  .wa-float:hover { transform: scale(1.12); box-shadow: 0 10px 35px rgba(37,211,102,0.55); }
-  @keyframes wa-pulse {
-    0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
-    50% { box-shadow: 0 6px 32px rgba(37,211,102,0.7), 0 0 0 10px rgba(37,211,102,0.08); }
-  }
+/* ─── FAQ ─── */
+#faq{background:var(--cream);padding:6rem 8%}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:3rem}
+.faq-item{background:var(--warm-white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.faq-q{padding:1.3rem 1.5rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:0.9rem;font-weight:500;color:var(--dark-brown);gap:1rem;transition:background 0.2s}
+.faq-q:hover{background:var(--cream)}
+.faq-icon{font-size:1.2rem;flex-shrink:0;transition:transform 0.3s;color:var(--gold)}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s}
+.faq-a p{padding:0 1.5rem 1.3rem;font-size:0.83rem;color:var(--text-muted);line-height:1.7;font-weight:300}
+.faq-item.open .faq-a{max-height:200px}
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--black); color: rgba(245,240,232,0.7);
-    padding: 3rem 8%; text-align: center;
-  }
-  .footer-logo {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
-    color: var(--warm-white); margin-bottom: 0.5rem;
-  }
-  .footer-logo span { color: var(--gold); }
-  footer p { font-size: 0.82rem; line-height: 1.7; font-weight: 300; }
-  .footer-links { display: flex; gap: 2rem; justify-content: center; margin: 1.2rem 0; flex-wrap: wrap; }
-  .footer-links a { color: rgba(245,240,232,0.6); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--gold); }
-  .footer-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; }
+/* ─── REVIEWS ─── */
+#reviews{background:var(--warm-white);padding:6rem 8%}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.review-card{background:var(--cream);border-radius:16px;padding:1.8rem;border:1px solid var(--border);transition:all 0.3s}
+.review-card:hover{transform:translateY(-4px);box-shadow:0 12px 35px rgba(44,33,24,0.08)}
+.stars{color:var(--gold);font-size:0.95rem;margin-bottom:1rem;letter-spacing:0.05em}
+.review-text{font-size:0.87rem;color:var(--mid-brown);line-height:1.75;font-weight:300;font-style:italic;margin-bottom:1.2rem}
+.reviewer{display:flex;align-items:center;gap:0.8rem}
+.reviewer-avatar{width:40px;height:40px;border-radius:50%;background:var(--wood-light);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--dark-brown);font-family:'Cormorant Garamond',serif}
+.reviewer-name{font-size:0.86rem;font-weight:600;color:var(--dark-brown)}
+.reviewer-loc{font-size:0.7rem;color:var(--text-muted)}
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 1100px) {
-    .products-grid { grid-template-columns: repeat(3,1fr); }
-    .categories-grid { grid-template-columns: repeat(3,1fr); }
-  }
-  @media (max-width: 900px) {
-    nav .nav-links { display: none; }
-    nav .nav-cta { display: none; }
-    .hamburger { display: flex; }
-    #home { grid-template-columns: 1fr; }
-    .hero-right { min-height: 45vw; }
-    .hero-left { padding: 4rem 5% 3rem; }
-    #about { grid-template-columns: 1fr; gap: 2.5rem; }
-    #contact { grid-template-columns: 1fr; gap: 2.5rem; }
-    .delivery-grid { grid-template-columns: 1fr 1fr; }
-    .reviews-grid { grid-template-columns: 1fr 1fr; }
-    .products-grid { grid-template-columns: repeat(2,1fr); }
-    .categories-grid { grid-template-columns: repeat(3,1fr); }
-    section { padding: 4rem 5%; }
-  }
-  @media (max-width: 600px) {
-    .hero-stats { gap: 1.2rem; }
-    .products-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .delivery-grid { grid-template-columns: 1fr; }
-    .reviews-grid { grid-template-columns: 1fr; }
-    .categories-grid { grid-template-columns: repeat(2,1fr); }
-    .hero-title { font-size: 2.4rem; }
-  }
+/* ─── INSTAGRAM STRIP ─── */
+#insta{background:var(--dark-brown);padding:3rem 8%;overflow:hidden}
+.insta-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.insta-header h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--cream);font-weight:300}
+.insta-header a{font-size:0.8rem;color:var(--wood-light);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s}
+.insta-header a:hover{color:var(--gold)}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:0.8rem}
+.insta-item{aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:var(--mid-brown);display:flex;align-items:center;justify-content:center;font-size:2.5rem;cursor:pointer;transition:all 0.3s;position:relative}
+.insta-item:hover{transform:scale(1.04);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.insta-overlay{position:absolute;inset:0;background:rgba(184,147,106,0.7);opacity:0;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:#fff;letter-spacing:0.1em;text-transform:uppercase;font-weight:600}
+.insta-item:hover .insta-overlay{opacity:1}
 
-  /* Fade-in animation */
-  .fade-up {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
+/* ─── CONTACT ─── */
+#contact{padding:6rem 8%;display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:1.4rem;margin-top:2rem}
+.contact-item{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border-radius:12px;border:1px solid var(--border);background:var(--warm-white);transition:all 0.25s}
+.contact-item:hover{border-color:var(--gold);transform:translateX(4px)}
+.contact-icon{width:44px;height:44px;border-radius:12px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.contact-item h4{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.2rem}
+.contact-item p,.contact-item a{font-size:0.92rem;color:var(--dark-brown);text-decoration:none;font-weight:400}
+.map-placeholder{border-radius:20px;overflow:hidden;border:1px solid var(--border);height:420px;background:linear-gradient(135deg,var(--cream),var(--wood-light));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem}
+.map-placeholder p{font-size:0.85rem;color:var(--text-muted);text-align:center;line-height:1.7;max-width:220px}
+.map-btn{background:var(--dark-brown);color:var(--cream);padding:0.7rem 1.6rem;border-radius:2rem;font-size:0.82rem;text-decoration:none;transition:all 0.2s;font-weight:500}
+.map-btn:hover{background:var(--gold)}
+
+/* ─── NEWSLETTER ─── */
+#newsletter{background:linear-gradient(135deg,var(--dark-brown) 0%,var(--mid-brown) 100%);padding:5rem 8%;text-align:center}
+#newsletter h2{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--cream);font-weight:300;margin-bottom:0.8rem}
+#newsletter p{color:rgba(245,240,232,0.65);font-size:0.92rem;margin-bottom:2rem;font-weight:300}
+.newsletter-form{display:flex;gap:0.8rem;max-width:480px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.newsletter-form input{flex:1;min-width:220px;padding:0.9rem 1.4rem;border-radius:2rem;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border 0.2s}
+.newsletter-form input::placeholder{color:rgba(245,240,232,0.4)}
+.newsletter-form input:focus{border-color:var(--gold)}
+.newsletter-form button{background:var(--gold);color:#fff;border:none;padding:0.9rem 2rem;border-radius:2rem;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.25s;font-family:'DM Sans',sans-serif}
+.newsletter-form button:hover{background:var(--wood);transform:translateY(-2px)}
+
+/* ─── FOOTER ─── */
+footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand .footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--cream);margin-bottom:0.8rem}
+.footer-logo span{color:var(--gold)}
+.footer-brand p{font-size:0.82rem;line-height:1.75;font-weight:300;max-width:260px}
+.footer-col h4{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--wood-light);margin-bottom:1.2rem;font-weight:600}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.7rem}
+.footer-col ul li a{color:rgba(245,240,232,0.55);text-decoration:none;font-size:0.82rem;font-weight:300;transition:color 0.2s}
+.footer-col ul li a:hover{color:var(--gold)}
+.footer-bottom{padding-top:2rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:0.75rem}
+.social-links{display:flex;gap:0.8rem}
+.social-link{width:36px;height:36px;border:1px solid rgba(255,255,255,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:rgba(245,240,232,0.6);text-decoration:none;transition:all 0.25s}
+.social-link:hover{background:var(--gold);border-color:var(--gold);color:#fff;transform:translateY(-2px)}
+
+/* ─── WA FLOAT ─── */
+.wa-float{position:fixed;bottom:2rem;right:2rem;z-index:500;width:60px;height:60px;border-radius:50%;background:var(--whatsapp);display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 6px 24px rgba(37,211,102,0.45);text-decoration:none;transition:transform 0.25s,box-shadow 0.25s;animation:waPulse 3s ease-in-out infinite}
+.wa-float:hover{transform:scale(1.12);box-shadow:0 10px 35px rgba(37,211,102,0.6)}
+@keyframes waPulse{0%,100%{box-shadow:0 6px 24px rgba(37,211,102,0.45)}50%{box-shadow:0 6px 32px rgba(37,211,102,0.7),0 0 0 12px rgba(37,211,102,0.07)}}
+
+/* ─── ADMIN PANEL ─── */
+#adminOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;backdrop-filter:blur(4px)}
+#adminOverlay.open{display:flex;align-items:stretch;justify-content:flex-end}
+#adminPanel{width:100%;max-width:900px;background:var(--admin-bg);height:100vh;overflow-y:auto;display:flex;flex-direction:column;animation:slideInRight 0.4s ease}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.admin-header{padding:1.5rem 2rem;border-bottom:1px solid var(--admin-border);display:flex;justify-content:space-between;align-items:center;background:var(--admin-card);position:sticky;top:0;z-index:10}
+.admin-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--cream);font-weight:400}
+.admin-title span{color:var(--gold)}
+.admin-close{background:none;border:1px solid var(--admin-border);color:var(--text-muted);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-family:sans-serif}
+.admin-close:hover{background:var(--mid-brown);color:var(--cream)}
+.admin-tabs{display:flex;gap:0;border-bottom:1px solid var(--admin-border);background:var(--admin-card)}
+.admin-tab{padding:0.9rem 1.5rem;font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.admin-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.admin-tab:hover{color:var(--wood-light)}
+.admin-body{padding:2rem;flex:1}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.admin-stat{background:var(--admin-card);border:1px solid var(--admin-border);border-radius:12px;padding:1.3rem}
+.admin-stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.5rem}
+.admin-stat-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--cream);font-weight:300}
+.admin-stat-delta{font-size:0.72rem;color:var(--whatsapp);margin-top:0.2rem}
+.admin-card{background:var(--admin-card);border:1px solid var(--admin-border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.admin-card-title{font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--wood-light);margin-bottom:1.2rem;font-weight:600}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-group label{font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
+.form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,0.05);border:1px solid var(--admin-border);border-radius:8px;padding:0.7rem 1rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.86rem;outline:none;transition:border 0.2s;width:100%}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold)}
+.form-group select option{background:var(--admin-bg);color:var(--cream)}
+.form-group textarea{resize:vertical;min-height:80px}
+.admin-btn{background:var(--gold);color:#fff;border:none;padding:0.75rem 1.8rem;border-radius:8px;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.admin-btn:hover{background:var(--wood);transform:translateY(-1px)}
+.admin-btn.secondary{background:transparent;border:1px solid var(--admin-border);color:var(--text-muted)}
+.admin-btn.secondary:hover{border-color:var(--gold);color:var(--gold)}
+.admin-btn.danger{background:#8b2e2e}
+.admin-btn.danger:hover{background:#b03535}
+.products-table{width:100%;border-collapse:collapse}
+.products-table th{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);padding:0.7rem 1rem;text-align:left;border-bottom:1px solid var(--admin-border)}
+.products-table td{padding:0.9rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.83rem;color:rgba(245,240,232,0.8);vertical-align:middle}
+.products-table tr:hover td{background:rgba(255,255,255,0.02)}
+.tbl-badge{font-size:0.65rem;padding:0.25rem 0.6rem;border-radius:2rem;font-weight:600;text-transform:uppercase}
+.tbl-badge.active{background:rgba(37,211,102,0.15);color:var(--whatsapp)}
+.tbl-badge.draft{background:rgba(184,147,106,0.15);color:var(--gold)}
+.tbl-actions{display:flex;gap:0.5rem}
+.tbl-btn{background:rgba(255,255,255,0.06);border:none;color:rgba(245,240,232,0.6);padding:0.3rem 0.7rem;border-radius:6px;font-size:0.75rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.tbl-btn:hover{background:rgba(255,255,255,0.12);color:var(--cream)}
+.orders-list{display:flex;flex-direction:column;gap:0.8rem}
+.order-item{background:rgba(255,255,255,0.03);border:1px solid var(--admin-border);border-radius:10px;padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem}
+.order-info h4{font-size:0.88rem;color:var(--cream);font-weight:500}
+.order-info p{font-size:0.76rem;color:var(--text-muted);margin-top:0.2rem}
+.order-status{font-size:0.72rem;padding:0.3rem 0.8rem;border-radius:2rem;font-weight:600;text-transform:uppercase}
+.status-pending{background:rgba(255,165,0,0.15);color:#ffaa30}
+.status-confirmed{background:rgba(37,211,102,0.15);color:var(--whatsapp)}
+.status-delivered{background:rgba(100,150,200,0.15);color:#7eb8e8}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:0.9rem 0;border-bottom:1px solid var(--admin-border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:0.85rem;color:rgba(245,240,232,0.8)}
+.toggle-sub{font-size:0.72rem;color:var(--text-muted);margin-top:0.2rem}
+.toggle{width:44px;height:24px;background:rgba(255,255,255,0.1);border-radius:12px;position:relative;cursor:pointer;transition:background 0.3s;flex-shrink:0}
+.toggle.on{background:var(--gold)}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.toggle.on::after{transform:translateX(20px)}
+.admin-success{background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:var(--whatsapp);padding:0.8rem 1.2rem;border-radius:8px;font-size:0.83rem;margin-bottom:1rem;display:none}
+.admin-success.show{display:block}
+.color-picker-row{display:flex;gap:0.7rem;flex-wrap:wrap;margin-top:0.5rem}
+.color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.2s,border-color 0.2s}
+.color-swatch:hover{transform:scale(1.2)}
+.color-swatch.selected{border-color:var(--cream)}
+
+/* ─── SCROLL FX ─── */
+.fade-up{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fade-left{opacity:0;transform:translateX(-32px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fade-left.visible{opacity:1;transform:translateX(0)}
+.fade-right{opacity:0;transform:translateX(32px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fade-right.visible{opacity:1;transform:translateX(0)}
+.stagger-1{transition-delay:0.1s}
+.stagger-2{transition-delay:0.2s}
+.stagger-3{transition-delay:0.3s}
+.stagger-4{transition-delay:0.4s}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1100px){
+  .products-grid{grid-template-columns:repeat(3,1fr)}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .admin-stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  nav .nav-links,nav .nav-cta,.nav-right .btn-admin{display:none}
+  .hamburger{display:flex}
+  #home{grid-template-columns:1fr}
+  .hero-slide{grid-template-columns:1fr}
+  .hero-right{min-height:50vw}
+  #about{grid-template-columns:1fr;gap:3rem;padding:4rem 5%}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  #contact{grid-template-columns:1fr;gap:3rem}
+  .faq-grid{grid-template-columns:1fr}
+  .delivery-grid{grid-template-columns:1fr 1fr}
+  .reviews-grid{grid-template-columns:1fr 1fr}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  section.content{padding:4rem 5%}
+  #delivery,#faq,#reviews,#why,#newsletter{padding:4rem 5%}
+  #catalog.content{padding:4rem 5%}
+  #contact{padding:4rem 5%}
+  #insta{padding:3rem 5%}
+  .footer-grid{grid-template-columns:1fr;gap:2rem}
+}
+@media(max-width:600px){
+  .products-grid{grid-template-columns:1fr 1fr;gap:1rem}
+  .why-grid{grid-template-columns:1fr}
+  .delivery-grid{grid-template-columns:1fr}
+  .reviews-grid{grid-template-columns:1fr}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .hero-stats{gap:1rem}
+  .hero-left{padding:3rem 5% 2.5rem}
+  .admin-stats-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  #adminPanel{max-width:100%}
+  .admin-tabs{overflow-x:auto}
+}
 </style>
 </head>
 <body>
 
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">Nairobi <span style="color:var(--gold)">Luxe</span> Furniture</div>
+  <div class="pre-bar"><div class="pre-fill"></div></div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar">
+  <div class="announce-inner">
+    <span>🚚 Free delivery within Nairobi</span>
+    <span>✨ Custom orders welcome — WhatsApp us!</span>
+    <span>💳 Pay via M-Pesa Paybill 522533</span>
+    <span>🎉 10% off on orders above KES 80,000</span>
+    <span>🛋️ New arrivals every Friday</span>
+    <span>📞 Open 7 days: 8am – 7pm</span>
+    <span>🚚 Free delivery within Nairobi</span>
+    <span>✨ Custom orders welcome — WhatsApp us!</span>
+    <span>💳 Pay via M-Pesa Paybill 522533</span>
+    <span>🎉 10% off on orders above KES 80,000</span>
+    <span>🛋️ New arrivals every Friday</span>
+    <span>📞 Open 7 days: 8am – 7pm</span>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav id="navbar">
-  <div class="nav-logo">Nairobi <span>Luxe</span> Furniture</div>
+  <div class="nav-logo" onclick="scrollTop()">Nairobi <span>Luxe</span> Furniture</div>
   <ul class="nav-links">
     <li><a href="#home">Home</a></li>
     <li><a href="#catalog">Catalog</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#delivery">Delivery</a></li>
+    <li><a href="#reviews">Reviews</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a class="nav-cta" href="https://wa.me/254700000000?text=Hi%2C+I%27m+interested+in+your+furniture%21" target="_blank">
-    <span>💬</span> WhatsApp Us
-  </a>
-  <div class="hamburger" onclick="toggleMenu()">
+  <div class="nav-right">
+    <button class="btn-admin" onclick="openAdmin()">⚙️ Admin</button>
+    <a class="nav-cta" href="https://wa.me/254700000000?text=Hi%2C+I%27m+interested+in+your+furniture!" target="_blank">💬 WhatsApp Us</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
 </nav>
 
+<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--cream)">Menu</div>
+    <div onclick="closeMenu()" style="color:var(--wood-light);cursor:pointer;font-size:1.5rem">✕</div>
+  </div>
   <a href="#home" onclick="closeMenu()">Home</a>
   <a href="#catalog" onclick="closeMenu()">Catalog</a>
   <a href="#about" onclick="closeMenu()">About Us</a>
-  <a href="#delivery" onclick="closeMenu()">Delivery Info</a>
+  <a href="#delivery" onclick="closeMenu()">Delivery</a>
   <a href="#reviews" onclick="closeMenu()">Reviews</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
-  <a href="https://wa.me/254700000000" target="_blank" style="color:#25D366;font-weight:500;">💬 WhatsApp Us</a>
+  <a href="https://wa.me/254700000000" target="_blank" style="color:var(--whatsapp);border-color:rgba(37,211,102,0.2)">💬 WhatsApp Us</a>
 </div>
 
-<!-- HERO -->
+<!-- ── HERO SLIDER ── -->
 <section id="home">
-  <div class="hero-left">
-    <div class="hero-tag">Nairobi's Premier Furniture</div>
-    <h1 class="hero-title">
-      Crafted for the<br>
-      <em>Modern</em> Home
-    </h1>
-    <p class="hero-subtitle">
-      Premium sofas, beds, dining sets & office furniture — handpicked for Kenyan homes. Custom orders welcome. Same-week delivery across Nairobi.
-    </p>
-    <div class="hero-actions">
-      <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+I%27d+like+to+browse+your+furniture+collection%21" target="_blank">
-        💬 Order on WhatsApp
-      </a>
-      <a class="btn-outline" href="#catalog">View Catalog</a>
+  <!-- Slide 1 -->
+  <div class="hero-slide active" id="slide0">
+    <div class="hero-left">
+      <div class="hero-tag">Nairobi's Premium Furniture</div>
+      <h1 class="hero-title">Crafted for the<br><em>Modern</em> Kenyan Home</h1>
+      <p class="hero-subtitle">Premium sofas, beds, dining sets & office furniture. Custom orders welcome. Same-week delivery across Nairobi.</p>
+      <div class="hero-actions">
+        <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+I%27d+like+to+browse+your+collection." target="_blank">💬 Order on WhatsApp</a>
+        <a class="btn-outline" href="#catalog">View Catalog →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num" data-count="500">0</div><div class="stat-label">Happy Clients</div></div>
+        <div class="stat-item"><div class="stat-num" data-count="8">0</div><div class="stat-label">Years in Business</div></div>
+        <div class="stat-item"><div class="stat-num" data-count="47">0</div><div class="stat-label">Counties Served</div></div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">500+</div>
-        <div class="stat-label">Happy Clients</div>
+    <div class="hero-right" style="background:linear-gradient(135deg,#2c2118,#6b4f3a,#c4915a)">
+      <div class="hero-visual" style="color:var(--cream)">
+        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🛋️</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Living Room Collection</div>
+        <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 18,000</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">8yr</div>
-        <div class="stat-label">In Business</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">47</div>
-        <div class="stat-label">Counties Served</div>
-      </div>
+      <div class="hero-badge"><div class="badge-label">🔥 Best Seller</div><div class="badge-val">Milano L-Sofa — KES 45,000</div></div>
     </div>
   </div>
-  <div class="hero-right">
-    <div style="width:100%;height:100%;background:linear-gradient(135deg,#2c2118 0%,#6b4f3a 50%,#c4915a 100%);display:flex;align-items:center;justify-content:center;">
-      <div style="text-align:center;color:rgba(245,240,232,0.9);">
-        <div style="font-size:7rem;margin-bottom:1rem;">🛋️</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;letter-spacing:0.05em;">Premium Furnishings</div>
-        <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);margin-top:0.5rem;letter-spacing:0.1em;">SINCE 2016</div>
+  <!-- Slide 2 -->
+  <div class="hero-slide" id="slide1">
+    <div class="hero-left">
+      <div class="hero-tag">Premium Bedroom Furniture</div>
+      <h1 class="hero-title">Sleep in<br><em>Luxury</em> Every Night</h1>
+      <p class="hero-subtitle">Solid wood bed frames, memory foam mattresses, and wardrobes — all built for Kenyan homes. Delivered and assembled.</p>
+      <div class="hero-actions">
+        <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+I%27m+looking+for+a+bedroom+set." target="_blank">💬 Ask About Beds</a>
+        <a class="btn-outline" href="#catalog">View Bedroom →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">Bedroom Sets Sold</div></div>
+        <div class="stat-item"><div class="stat-num">1yr</div><div class="stat-label">Warranty</div></div>
+        <div class="stat-item"><div class="stat-num">Free</div><div class="stat-label">Assembly Included</div></div>
       </div>
     </div>
-    <div class="hero-badge">
-      <div class="badge-label">Best Seller</div>
-      <div class="badge-val">Milano L-Sofa — from KES 45,000</div>
+    <div class="hero-right" style="background:linear-gradient(135deg,#1a1612,#4a3520,#8b6340)">
+      <div class="hero-visual" style="color:var(--cream)">
+        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🛏️</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Bedroom Collection</div>
+        <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 14,000</div>
+      </div>
+      <div class="hero-badge"><div class="badge-label">⭐ New Arrival</div><div class="badge-val">Royal King Bed — KES 38,000</div></div>
     </div>
   </div>
+  <!-- Slide 3 -->
+  <div class="hero-slide" id="slide2">
+    <div class="hero-left">
+      <div class="hero-tag">Dining & Entertainment</div>
+      <h1 class="hero-title">Dine Together,<br><em>Live</em> Together</h1>
+      <p class="hero-subtitle">Solid acacia dining sets, glass tables, and TV consoles that become the centrepiece of your home.</p>
+      <div class="hero-actions">
+        <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+I%27m+interested+in+your+dining+sets." target="_blank">💬 Ask About Dining</a>
+        <a class="btn-outline" href="#catalog">View Dining →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num">4–8</div><div class="stat-label">Seater Options</div></div>
+        <div class="stat-item"><div class="stat-num">Custom</div><div class="stat-label">Sizes Available</div></div>
+        <div class="stat-item"><div class="stat-num">5★</div><div class="stat-label">Avg Rating</div></div>
+      </div>
+    </div>
+    <div class="hero-right" style="background:linear-gradient(135deg,#2c1f0e,#7a5a2a,#d4a45c)">
+      <div class="hero-visual" style="color:var(--cream)">
+        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🍽️</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Dining Collection</div>
+        <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 12,500</div>
+      </div>
+      <div class="hero-badge"><div class="badge-label">✨ Premium Pick</div><div class="badge-val">Acacia 6-Seater — KES 55,000</div></div>
+    </div>
+  </div>
+  <!-- Slide 4 -->
+  <div class="hero-slide" id="slide3">
+    <div class="hero-left">
+      <div class="hero-tag">Work From Home Ready</div>
+      <h1 class="hero-title">Your Office,<br><em>Elevated</em></h1>
+      <p class="hero-subtitle">Executive desks, ergonomic chairs, and filing solutions. Build the home office you deserve — delivered to your door.</p>
+      <div class="hero-actions">
+        <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+I%27m+looking+for+office+furniture." target="_blank">💬 Ask About Office</a>
+        <a class="btn-outline" href="#catalog">View Office →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num">150+</div><div class="stat-label">Offices Furnished</div></div>
+        <div class="stat-item"><div class="stat-num">Bulk</div><div class="stat-label">Discounts Available</div></div>
+        <div class="stat-item"><div class="stat-num">WFH</div><div class="stat-label">Specialists</div></div>
+      </div>
+    </div>
+    <div class="hero-right" style="background:linear-gradient(135deg,#12100e,#3a2e24,#7a6450)">
+      <div class="hero-visual" style="color:var(--cream)">
+        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">💼</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Office Collection</div>
+        <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 14,000</div>
+      </div>
+      <div class="hero-badge"><div class="badge-label">🏆 Most Popular</div><div class="badge-val">Executive L-Desk — KES 42,000</div></div>
+    </div>
+  </div>
+
+  <button class="hero-arrow prev" onclick="heroNav(-1)">←</button>
+  <button class="hero-arrow next" onclick="heroNav(1)">→</button>
+  <div class="hero-dots" id="heroDots"></div>
 </section>
 
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  <div class="feat-item"><span class="ico">🚚</span><p>Free Nairobi Delivery</p></div>
+  <div class="feat-item"><span class="ico">🔧</span><p>Free Assembly</p></div>
+  <div class="feat-item"><span class="ico">💳</span><p>M-Pesa Accepted</p></div>
+  <div class="feat-item"><span class="ico">🛡️</span><p>1 Year Warranty</p></div>
+  <div class="feat-item"><span class="ico">🎨</span><p>Custom Orders</p></div>
+</div>
+
+<!-- PROMO BANNERS -->
+<div id="promos">
+  <div class="inner">
+    <div>
+      <div class="section-tag">Special Offers</div>
+      <h2 class="section-title" style="margin-bottom:0">Deals & Promotions</h2>
+    </div>
+    <div style="display:flex;gap:0.7rem">
+      <button class="hero-arrow" style="position:static;transform:none;width:38px;height:38px" onclick="promoNav(-1)">←</button>
+      <button class="hero-arrow" style="position:static;transform:none;width:38px;height:38px" onclick="promoNav(1)">→</button>
+    </div>
+  </div>
+  <div class="promo-track-wrap">
+    <div class="promo-track" id="promoTrack">
+      <div class="promo-card">
+        <div class="promo-card-inner" style="background:linear-gradient(135deg,#2c2118,#8b5a2b)">
+          <div class="promo-label" style="color:var(--wood-light)">Limited Offer</div>
+          <div class="promo-title" style="color:var(--cream)">Sofa Sale<br>Up to 20% Off</div>
+          <a class="promo-cta" href="https://wa.me/254700000000?text=Hi!+I+saw+the+sofa+sale+offer." target="_blank">Shop Now →</a>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-card-inner" style="background:linear-gradient(135deg,#1a3020,#2d6040)">
+          <div class="promo-label" style="color:rgba(255,255,255,0.7)">Free Upgrade</div>
+          <div class="promo-title" style="color:#fff">Buy Bed,<br>Get Free Mattress</div>
+          <a class="promo-cta" href="https://wa.me/254700000000?text=Hi!+I+want+the+free+mattress+deal." target="_blank">Claim Offer →</a>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-card-inner" style="background:linear-gradient(135deg,#2a1a2e,#6b3a7a)">
+          <div class="promo-label" style="color:rgba(255,255,255,0.7)">Office Bundle</div>
+          <div class="promo-title" style="color:#fff">Desk + Chair<br>KES 48,000</div>
+          <a class="promo-cta" href="https://wa.me/254700000000?text=Hi!+I%27m+interested+in+the+office+bundle." target="_blank">Get Bundle →</a>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-card-inner" style="background:linear-gradient(135deg,#2c1e0a,#c47820)">
+          <div class="promo-label" style="color:rgba(255,255,255,0.7)">Dining Week</div>
+          <div class="promo-title" style="color:#fff">6-Seater Sets<br>From KES 40,000</div>
+          <a class="promo-cta" href="https://wa.me/254700000000?text=Hi!+Tell+me+more+about+dining+sets." target="_blank">Ask Price →</a>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-card-inner" style="background:linear-gradient(135deg,#0f1e2c,#1a4a6b)">
+          <div class="promo-label" style="color:rgba(255,255,255,0.7)">Bulk Orders</div>
+          <div class="promo-title" style="color:#fff">Hotels & Offices<br>Special Rates</div>
+          <a class="promo-cta" href="https://wa.me/254700000000?text=Hi!+I+have+a+bulk+furniture+order." target="_blank">Get Quote →</a>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-card-inner" style="background:linear-gradient(135deg,#1e1212,#6b2020)">
+          <div class="promo-label" style="color:rgba(255,255,255,0.7)">Custom Order</div>
+          <div class="promo-title" style="color:#fff">Your Design,<br>Our Craft</div>
+          <a class="promo-cta" href="https://wa.me/254700000000?text=Hi!+I+want+a+custom+furniture+order." target="_blank">Start Design →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="promo-nav" id="promoNav"></div>
+</div>
+
 <!-- CATALOG -->
-<section id="catalog">
-  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+<section id="catalog" class="content">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
     <div>
       <div class="section-tag">Our Collection</div>
-      <h2 class="section-title">Browse by Category</h2>
+      <h2 class="section-title">Browse Our Furniture</h2>
     </div>
-    <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+please+send+me+your+full+catalogue%21" target="_blank">
-      💬 Get Full Catalogue
-    </a>
+    <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+Please+send+me+your+full+catalogue." target="_blank">💬 Full Catalogue</a>
   </div>
-
   <div class="categories-grid" id="catGrid">
-    <div class="cat-card active" onclick="filterProducts('sofas', this)">
-      <div class="cat-img">🛋️</div>
-      <div class="cat-name">Sofas</div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('beds', this)">
-      <div class="cat-img">🛏️</div>
-      <div class="cat-name">Beds</div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('dining', this)">
-      <div class="cat-img">🍽️</div>
-      <div class="cat-name">Dining Tables</div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('office', this)">
-      <div class="cat-img">💼</div>
-      <div class="cat-name">Office Furniture</div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('tvstands', this)">
-      <div class="cat-img">📺</div>
-      <div class="cat-name">TV Stands</div>
-    </div>
+    <div class="cat-pill active" onclick="filterProducts('all',this)">🏠 All Items</div>
+    <div class="cat-pill" onclick="filterProducts('sofas',this)">🛋️ Sofas</div>
+    <div class="cat-pill" onclick="filterProducts('beds',this)">🛏️ Beds</div>
+    <div class="cat-pill" onclick="filterProducts('dining',this)">🍽️ Dining</div>
+    <div class="cat-pill" onclick="filterProducts('office',this)">💼 Office</div>
+    <div class="cat-pill" onclick="filterProducts('tvstands',this)">📺 TV Stands</div>
   </div>
-
-  <div class="products-header" style="margin-top:3rem;">
-    <div>
-      <div class="section-tag" id="activeCategory">Sofas</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--dark-brown);">Featured Pieces</h3>
-    </div>
-  </div>
-
-  <div class="products-grid" id="productsGrid">
-    <!-- Products injected by JS -->
-  </div>
+  <div class="products-grid" id="productsGrid"></div>
 </section>
 
 <!-- ABOUT -->
-<section id="about">
-  <div class="about-img-grid fade-up">
-    <div class="about-img" style="background:linear-gradient(135deg,#e8c99a,#c4915a);font-size:5rem;">🏪</div>
-    <div class="about-img">🪑</div>
-    <div class="about-img">🔨</div>
+<section id="about" class="content">
+  <div class="about-visual fade-left">
+    <div class="about-main-img" style="font-size:7rem">🏪</div>
+    <div class="about-float-card">
+      <div class="about-float-title">Our Showroom</div>
+      <div class="about-float-row">
+        <div class="about-mini-stat"><div class="num">500+</div><div class="lbl">Happy Families</div></div>
+        <div class="about-mini-stat"><div class="num">8yrs</div><div class="lbl">Trusted Since 2016</div></div>
+      </div>
+    </div>
   </div>
-  <div class="fade-up">
+  <div class="fade-right">
     <div class="section-tag">Our Story</div>
     <h2 class="section-title">Furniture Built<br>for Kenyan Homes</h2>
-    <p class="section-subtitle">
-      Since 2016, Nairobi Luxe Furniture has been crafting and sourcing premium furniture that balances style with durability. Our showroom in Westlands has served over 500 families across Kenya.
-    </p>
+    <p class="section-subtitle">Since 2016, Nairobi Luxe Furniture has been curating and crafting premium furniture that balances style with Kenyan durability. Our showroom in Westlands has served over 500 families across all 47 counties.</p>
     <div class="trust-items">
-      <div class="trust-item">
+      <div class="trust-item fade-up stagger-1">
         <div class="trust-icon">✅</div>
-        <div class="trust-text">
-          <h4>Quality Guaranteed</h4>
-          <p>Every piece comes with a 1-year warranty. We only stock durable, locally-tested materials.</p>
-        </div>
+        <div class="trust-text"><h4>Quality Guaranteed</h4><p>Every piece comes with a 1-year warranty against manufacturing defects. We only source durable, locally-tested materials built for Kenyan weather and conditions.</p></div>
       </div>
-      <div class="trust-item">
+      <div class="trust-item fade-up stagger-2">
         <div class="trust-icon">🚚</div>
-        <div class="trust-text">
-          <h4>Nairobi-Wide Delivery</h4>
-          <p>Free delivery within Nairobi CBD & estates. Nationwide delivery available at a fee.</p>
-        </div>
+        <div class="trust-text"><h4>Nairobi-Wide Delivery</h4><p>Free delivery and professional assembly within Nairobi. Our team will set up furniture in your room, exactly as you want it.</p></div>
       </div>
-      <div class="trust-item">
+      <div class="trust-item fade-up stagger-3">
         <div class="trust-icon">💳</div>
-        <div class="trust-text">
-          <h4>M-Pesa Accepted</h4>
-          <p>Pay deposit via M-Pesa Paybill. Easy layby options available on select items.</p>
-        </div>
+        <div class="trust-text"><h4>M-Pesa & Layby Options</h4><p>Pay deposit via M-Pesa Paybill 522533. Flexible layby plans available — pay in installments over 3 months.</p></div>
       </div>
-      <div class="trust-item">
+      <div class="trust-item fade-up stagger-4">
         <div class="trust-icon">🎨</div>
-        <div class="trust-text">
-          <h4>Custom Orders Welcome</h4>
-          <p>Need a specific colour, size or design? We do custom orders — just WhatsApp us.</p>
-        </div>
+        <div class="trust-text"><h4>Custom Orders Welcome</h4><p>Need a specific colour, size or design? We do full custom orders. Send us a photo or describe your vision on WhatsApp.</p></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section id="why">
+  <div class="section-tag" style="color:var(--wood-light)"><span style="background:var(--wood-light)"></span>Why Choose Us</div>
+  <h2 class="section-title" style="color:var(--cream)">The Nairobi Luxe Difference</h2>
+  <div class="why-grid">
+    <div class="why-card fade-up stagger-1">
+      <div class="why-num">01</div>
+      <h3>Premium Materials</h3>
+      <p>We source only high-density foam, solid hardwood, and imported fabric. Every material is tested for durability in Kenyan climates before it reaches your home.</p>
+    </div>
+    <div class="why-card fade-up stagger-2">
+      <div class="why-num">02</div>
+      <h3>WhatsApp-First Service</h3>
+      <p>No complex checkout. Browse, negotiate, order and pay all via WhatsApp. We respond within 30 minutes during business hours. Real humans, real conversations.</p>
+    </div>
+    <div class="why-card fade-up stagger-3">
+      <div class="why-num">03</div>
+      <h3>Assembly Included</h3>
+      <p>Our professional delivery team assembles everything in your home — no extra charge. We'll even help you position the furniture exactly where you want it.</p>
+    </div>
+    <div class="why-card fade-up stagger-4">
+      <div class="why-num">04</div>
+      <h3>After-Sales Support</h3>
+      <p>We don't disappear after delivery. Call or WhatsApp us for any issues within your 1-year warranty. We'll come to you — no questions asked.</p>
     </div>
   </div>
 </section>
@@ -592,276 +751,837 @@
 <!-- DELIVERY -->
 <section id="delivery">
   <div class="section-tag">Shipping & Delivery</div>
-  <h2 class="section-title" style="color:var(--cream);">We Deliver Across Kenya</h2>
-  <p class="section-subtitle">Fast, reliable delivery with professional assembly included in Nairobi.</p>
-
+  <h2 class="section-title">We Deliver Across Kenya</h2>
+  <p class="section-subtitle">Fast, reliable delivery with professional assembly included in Nairobi. We ship to all 47 counties.</p>
   <div class="delivery-grid">
-    <div class="delivery-card fade-up">
+    <div class="delivery-card fade-up stagger-1">
       <div class="delivery-icon">📦</div>
       <h3>Same-Day Dispatch</h3>
-      <p>Order before 12pm and we dispatch same day within Nairobi. You'll receive a confirmation call from our driver.</p>
+      <p>Order before 12pm and we dispatch the same day within Nairobi. You'll receive a WhatsApp confirmation with your driver's details and ETA.</p>
     </div>
-    <div class="delivery-card fade-up">
+    <div class="delivery-card fade-up stagger-2">
       <div class="delivery-icon">🔧</div>
       <h3>Free Assembly</h3>
-      <p>Our team assembles all furniture in your home at no extra charge — Nairobi deliveries only.</p>
+      <p>Our professional team assembles all furniture in your home — Nairobi deliveries only. Takes 30–90 minutes depending on the item.</p>
     </div>
-    <div class="delivery-card fade-up">
+    <div class="delivery-card fade-up stagger-3">
       <div class="delivery-icon">🛡️</div>
       <h3>Insured Transport</h3>
-      <p>All furniture is wrapped, insured and handled with care. Any damage during transit is replaced free.</p>
+      <p>Every item is wrapped, padded and insured during transport. Any damage in transit is replaced at no charge to you — guaranteed.</p>
     </div>
   </div>
-
-  <div class="delivery-zones" style="margin-top:3rem;">
-    <h3>Delivery Zones & Costs</h3>
+  <div class="zone-table-wrap fade-up" style="margin-top:3rem">
     <table class="zone-table">
-      <thead>
-        <tr><th>Location</th><th>Delivery Time</th><th>Cost</th></tr>
-      </thead>
+      <thead><tr><th>Location</th><th>Delivery Time</th><th>Cost</th><th>Assembly</th></tr></thead>
       <tbody>
-        <tr><td>Nairobi CBD & Estates</td><td>Same day – 1 day</td><td class="free-tag">FREE</td></tr>
-        <tr><td>Nairobi Outskirts (Thika, Kiambu, Ngong)</td><td>1–2 days</td><td>From KES 500</td></tr>
-        <tr><td>Other Counties (Mombasa, Kisumu, Nakuru)</td><td>2–4 days</td><td>Negotiable — WhatsApp us</td></tr>
-        <tr><td>Custom / Remote Areas</td><td>TBD</td><td>Contact us for quote</td></tr>
+        <tr><td>Nairobi CBD & all Estates</td><td>Same day – 1 day</td><td class="free-tag">FREE</td><td>✅ Included</td></tr>
+        <tr><td>Kiambu, Thika, Ngong</td><td>1–2 days</td><td>From KES 500</td><td>✅ Included</td></tr>
+        <tr><td>Mombasa, Kisumu, Nakuru</td><td>2–4 days</td><td>Negotiable</td><td>❌ Extra charge</td></tr>
+        <tr><td>All Other Counties</td><td>3–7 days</td><td>WhatsApp for quote</td><td>❌ Self-assembly</td></tr>
       </tbody>
     </table>
   </div>
-
-  <div style="margin-top:2.5rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center;">
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:1.2rem 2rem;">
-      <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--wood-light);margin-bottom:0.3rem;">M-Pesa Paybill</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--cream);font-weight:400;">522 533</div>
-      <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);">Account: Your Phone Number</div>
+  <div class="mpesa-box fade-up">
+    <div>
+      <div class="mpesa-label">M-Pesa Paybill</div>
+      <div class="mpesa-num">522 533</div>
+      <div class="mpesa-sub">Account: Your Phone Number</div>
     </div>
-    <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+I+need+a+delivery+quote+for+my+area." target="_blank">
-      💬 Get Delivery Quote
-    </a>
+    <div style="height:50px;width:1px;background:rgba(255,255,255,0.1)"></div>
+    <div>
+      <div class="mpesa-label">Minimum Deposit</div>
+      <div class="mpesa-num">30%</div>
+      <div class="mpesa-sub">Balance on delivery</div>
+    </div>
+    <div style="height:50px;width:1px;background:rgba(255,255,255,0.1)"></div>
+    <div>
+      <div class="mpesa-label">Layby Plan</div>
+      <div class="mpesa-num">3 Months</div>
+      <div class="mpesa-sub">Interest-free installments</div>
+    </div>
+    <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+I+need+a+delivery+quote+for+my+area." target="_blank" style="margin-left:auto">💬 Get Delivery Quote</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-tag">Got Questions?</div>
+  <h2 class="section-title">Frequently Asked Questions</h2>
+  <div class="faq-grid" id="faqGrid">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do you deliver outside Nairobi? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes! We deliver to all 47 counties in Kenya. Delivery cost and timeline depends on location. WhatsApp us with your county and we'll give you an exact quote within 30 minutes.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I order a custom size or colour? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Absolutely! Custom orders are our speciality. Send us a description, photo, or sketch via WhatsApp and we'll get you a quote within 24 hours. Turnaround time is 7–21 days depending on complexity.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do I pay? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>We accept M-Pesa (Paybill 522533), cash on delivery (Nairobi only), and bank transfer. Pay a 30% deposit to confirm your order and the balance on delivery.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What if my furniture arrives damaged? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>All our deliveries are insured. If any item arrives damaged, WhatsApp us a photo and we'll arrange a free replacement or repair within 48 hours — no questions asked.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do you offer layby or installments? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes! We offer a 3-month interest-free layby plan. Pay 30% to reserve your item, then split the rest over 2 more payments. Item is delivered after full payment. WhatsApp us to set this up.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I visit your showroom? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes! Our showroom is at Westlands Square, Ring Road, 1st Floor Unit 12. Open Mon–Sat 8am–7pm, Sunday 10am–5pm. WhatsApp us before visiting and we'll make sure a sales expert is available for you.</p></div>
+    </div>
   </div>
 </section>
 
 <!-- REVIEWS -->
 <section id="reviews">
   <div class="section-tag">Testimonials</div>
-  <h2 class="section-title">What Our Customers Say</h2>
-  <p class="section-subtitle">Real reviews from real Kenyan homes.</p>
-
-  <div class="reviews-grid" style="margin-top:2.5rem;">
-    <div class="review-card fade-up">
+  <h2 class="section-title">What Kenyan Homes Say</h2>
+  <div class="reviews-grid">
+    <div class="review-card fade-up stagger-1">
       <div class="stars">★★★★★</div>
-      <p class="review-text">"Best furniture I've ever bought in Nairobi. The Milano sofa is exactly as shown — excellent quality and delivery was on time. Will definitely order again!"</p>
-      <div class="reviewer">
-        <div class="reviewer-avatar">A</div>
-        <div>
-          <div class="reviewer-name">Amina Wanjiku</div>
-          <div class="reviewer-loc">Kilimani, Nairobi</div>
-        </div>
-      </div>
+      <p class="review-text">"Best furniture I've bought in Nairobi. The Milano sofa is exactly as shown — excellent quality and delivery was on time. The assembly team was professional and fast!"</p>
+      <div class="reviewer"><div class="reviewer-avatar">A</div><div><div class="reviewer-name">Amina Wanjiku</div><div class="reviewer-loc">Kilimani, Nairobi</div></div></div>
     </div>
-    <div class="review-card fade-up">
+    <div class="review-card fade-up stagger-2">
       <div class="stars">★★★★★</div>
-      <p class="review-text">"I ordered a custom dining set and they delivered exactly what I wanted. The WhatsApp communication was smooth and pricing was very fair. Highly recommended!"</p>
-      <div class="reviewer">
-        <div class="reviewer-avatar">D</div>
-        <div>
-          <div class="reviewer-name">David Otieno</div>
-          <div class="reviewer-loc">Westlands, Nairobi</div>
-        </div>
-      </div>
+      <p class="review-text">"I ordered a custom 8-seater dining table and they delivered exactly what I wanted. WhatsApp communication was smooth and pricing was very fair. Highly recommended!"</p>
+      <div class="reviewer"><div class="reviewer-avatar">D</div><div><div class="reviewer-name">David Otieno</div><div class="reviewer-loc">Westlands, Nairobi</div></div></div>
     </div>
-    <div class="review-card fade-up">
+    <div class="review-card fade-up stagger-3">
       <div class="stars">★★★★☆</div>
-      <p class="review-text">"The office desk and chair set is sturdy and looks great. They assembled it in my home office — very professional team. Will order the TV stand next month."</p>
-      <div class="reviewer">
-        <div class="reviewer-avatar">F</div>
-        <div>
-          <div class="reviewer-name">Faith Kimani</div>
-          <div class="reviewer-loc">South B, Nairobi</div>
-        </div>
-      </div>
+      <p class="review-text">"The office desk and ergonomic chair are sturdy and look premium. They assembled everything in my home office. Very professional team. Will order the bedroom set next month!"</p>
+      <div class="reviewer"><div class="reviewer-avatar">F</div><div><div class="reviewer-name">Faith Kimani</div><div class="reviewer-loc">South B, Nairobi</div></div></div>
+    </div>
+    <div class="review-card fade-up stagger-1">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"I was sceptical about buying furniture online but these guys are legit. Paid deposit via M-Pesa and my King bed arrived the next day. Fully assembled in 45 minutes. Wow!"</p>
+      <div class="reviewer"><div class="reviewer-avatar">J</div><div><div class="reviewer-name">John Mwangi</div><div class="reviewer-loc">Ruaka, Kiambu</div></div></div>
+    </div>
+    <div class="review-card fade-up stagger-2">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Furnished my entire 3-bedroom apartment through Nairobi Luxe. They gave me a bulk discount and the quality is exceptional. My friends always ask where I got my furniture from!"</p>
+      <div class="reviewer"><div class="reviewer-avatar">L</div><div><div class="reviewer-name">Lucy Adhiambo</div><div class="reviewer-loc">Lavington, Nairobi</div></div></div>
+    </div>
+    <div class="review-card fade-up stagger-3">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Fast delivery to Nakuru! Didn't expect it to arrive in 2 days. The TV console was perfectly packed with zero damage. Price was reasonable and the WhatsApp service was excellent."</p>
+      <div class="reviewer"><div class="reviewer-avatar">P</div><div><div class="reviewer-name">Peter Kariuki</div><div class="reviewer-loc">Nakuru Town</div></div></div>
     </div>
   </div>
 </section>
 
+<!-- INSTAGRAM / SOCIAL -->
+<div id="insta">
+  <div class="insta-header">
+    <h3>Follow Us @NairobiLuxeFurniture</h3>
+    <a href="https://www.instagram.com" target="_blank">View on Instagram ↗</a>
+  </div>
+  <div class="insta-grid">
+    <div class="insta-item" style="background:linear-gradient(135deg,#c4915a,#e8c99a)">🛋️<div class="insta-overlay">View Post</div></div>
+    <div class="insta-item" style="background:linear-gradient(135deg,#2c2118,#6b4f3a)">🛏️<div class="insta-overlay">View Post</div></div>
+    <div class="insta-item" style="background:linear-gradient(135deg,#8b6340,#c4915a)">🍽️<div class="insta-overlay">View Post</div></div>
+    <div class="insta-item" style="background:linear-gradient(135deg,#4a3520,#8b6340)">💼<div class="insta-overlay">View Post</div></div>
+    <div class="insta-item" style="background:linear-gradient(135deg,#e8c99a,#c4915a)">📺<div class="insta-overlay">View Post</div></div>
+    <div class="insta-item" style="background:linear-gradient(135deg,#6b4f3a,#2c2118)">🪑<div class="insta-overlay">View Post</div></div>
+  </div>
+</div>
+
 <!-- CONTACT -->
-<section id="contact">
-  <div class="fade-up">
+<section id="contact" class="content">
+  <div class="fade-left">
     <div class="section-tag">Get In Touch</div>
     <h2 class="section-title">Visit Our Showroom<br>or Chat With Us</h2>
-    <p class="section-subtitle">Our team is available 7 days a week to help you find the perfect furniture.</p>
-
+    <p class="section-subtitle">Our team is available 7 days a week to help you find the perfect furniture for your home.</p>
     <div class="contact-info">
       <div class="contact-item">
         <div class="contact-icon">💬</div>
-        <div>
-          <h4>WhatsApp</h4>
-          <a href="https://wa.me/254700000000" target="_blank">+254 700 000 000</a>
-        </div>
+        <div><h4>WhatsApp</h4><a href="https://wa.me/254700000000">+254 700 000 000</a></div>
       </div>
       <div class="contact-item">
         <div class="contact-icon">📞</div>
-        <div>
-          <h4>Phone</h4>
-          <a href="tel:+254700000000">+254 700 000 000</a>
-        </div>
+        <div><h4>Phone</h4><a href="tel:+254700000000">+254 700 000 000</a></div>
       </div>
       <div class="contact-item">
         <div class="contact-icon">📍</div>
-        <div>
-          <h4>Showroom</h4>
-          <p>Westlands Square, Ring Road, Nairobi<br>1st Floor, Unit 12</p>
-        </div>
+        <div><h4>Showroom Address</h4><p>Westlands Square, Ring Road Westlands<br>1st Floor, Unit 12 — Nairobi</p></div>
       </div>
       <div class="contact-item">
         <div class="contact-icon">🕐</div>
-        <div>
-          <h4>Opening Hours</h4>
-          <p>Mon–Sat: 8am – 7pm<br>Sunday: 10am – 5pm</p>
-        </div>
+        <div><h4>Opening Hours</h4><p>Mon–Sat: 8:00am – 7:00pm<br>Sunday: 10:00am – 5:00pm</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div><h4>Email</h4><a href="mailto:hello@nairobifurniture.co.ke">hello@nairobifurniture.co.ke</a></div>
       </div>
     </div>
-
-    <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
-      <a class="btn-wa" href="https://wa.me/254700000000?text=Hi%2C+I%27d+like+to+visit+your+showroom.+When+is+the+best+time%3F" target="_blank">
-        💬 Book Showroom Visit
-      </a>
-      <a class="btn-outline" href="tel:+254700000000">📞 Call Us</a>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem">
+      <a class="btn-wa" href="https://wa.me/254700000000?text=Hi!+I%27d+like+to+visit+your+showroom." target="_blank">💬 Book Showroom Visit</a>
+      <a class="btn-outline" href="tel:+254700000000">📞 Call Us Now</a>
     </div>
   </div>
-
-  <div class="map-placeholder fade-up">
-    <div class="map-icon">📍</div>
-    <p>Westlands Square, Ring Road Westlands<br>Nairobi, Kenya<br><br>1st Floor, Unit 12</p>
-    <a class="map-btn" href="https://maps.google.com/?q=Westlands+Square+Nairobi" target="_blank">Open in Google Maps</a>
+  <div class="map-placeholder fade-right">
+    <div style="font-size:3.5rem">📍</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--dark-brown);text-align:center">Westlands Square<br>Ring Road, Nairobi</p>
+    <p>1st Floor, Unit 12<br>Open 7 days a week</p>
+    <a class="map-btn" href="https://maps.google.com/?q=Westlands+Square+Nairobi" target="_blank">📍 Open in Google Maps</a>
   </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+  <div class="section-tag" style="justify-content:center;color:var(--wood-light)"><span style="background:var(--wood-light)"></span>Stay Updated</div>
+  <h2>Get Exclusive Offers & New Arrivals</h2>
+  <p>Subscribe to our newsletter. Be the first to know about sales, new products and style tips for your home.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="your@email.com" id="newsletterEmail">
+    <button onclick="subscribeNewsletter()">Subscribe →</button>
+  </div>
+  <p id="newsletterMsg" style="margin-top:1rem;font-size:0.85rem;color:var(--wood-light);display:none">✅ You're subscribed! Thank you.</p>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Nairobi <span>Luxe</span> Furniture</div>
-  <p>Premium furniture crafted for Kenyan homes. Showroom in Westlands, Nairobi.</p>
-  <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#catalog">Catalog</a>
-    <a href="#about">About</a>
-    <a href="#delivery">Delivery</a>
-    <a href="#reviews">Reviews</a>
-    <a href="#contact">Contact</a>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">Nairobi <span>Luxe</span> Furniture</div>
+      <p>Premium furniture crafted for Kenyan homes. Serving Nairobi and all 47 counties since 2016. Quality, style, and service — guaranteed.</p>
+      <div class="social-links" style="margin-top:1.5rem">
+        <a class="social-link" href="#" title="Facebook">f</a>
+        <a class="social-link" href="#" title="Instagram">📷</a>
+        <a class="social-link" href="https://wa.me/254700000000" title="WhatsApp">💬</a>
+        <a class="social-link" href="#" title="TikTok">♪</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#catalog">Catalog</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#delivery">Delivery Info</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Collections</h4>
+      <ul>
+        <li><a href="#catalog">Sofas & Lounges</a></li>
+        <li><a href="#catalog">Beds & Bedroom</a></li>
+        <li><a href="#catalog">Dining Tables</a></li>
+        <li><a href="#catalog">Office Furniture</a></li>
+        <li><a href="#catalog">TV Stands</a></li>
+        <li><a href="#catalog">Custom Orders</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/254700000000">💬 WhatsApp</a></li>
+        <li><a href="tel:+254700000000">📞 +254 700 000 000</a></li>
+        <li><a href="mailto:hello@nairobifurniture.co.ke">📧 Email Us</a></li>
+        <li><a href="#">📍 Westlands, Nairobi</a></li>
+        <li><a href="#">🕐 Mon–Sat 8am–7pm</a></li>
+      </ul>
+    </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2024 Nairobi Luxe Furniture. All rights reserved. | Westlands, Nairobi, Kenya</p>
+    <p>© 2024 Nairobi Luxe Furniture. All rights reserved. | Westlands Square, Nairobi, Kenya</p>
+    <p style="color:rgba(245,240,232,0.3)">Crafted with ❤️ for Kenyan Homes</p>
   </div>
 </footer>
 
-<!-- WhatsApp Float Button -->
-<a class="wa-float" href="https://wa.me/254700000000?text=Hi%2C+I%27m+interested+in+your+furniture%21" target="_blank" title="Chat on WhatsApp">💬</a>
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/254700000000?text=Hi!+I%27m+interested+in+your+furniture!" target="_blank" title="Chat on WhatsApp">💬</a>
 
-<script>
-const products = {
-  sofas: [
-    { name:"Milano L-Shaped Sofa", cat:"Sofas", price:"KES 45,000", desc:"5-seater L-sofa in premium fabric. Available in grey, beige & chocolate brown.", badge:"hot", icon:"🛋️" },
-    { name:"Monaco 3-Seater", cat:"Sofas", price:"KES 28,500", desc:"Classic 3-seater with high-density foam. Stain-resistant upholstery.", badge:"", icon:"🛋️" },
-    { name:"Serengeti Corner Sofa", cat:"Sofas", price:"KES 62,000", desc:"Luxury corner unit with chaise. Linen fabric, solid wood legs.", badge:"new", icon:"🛋️" },
-    { name:"Urban 2-Seater Loveseat", cat:"Sofas", price:"KES 18,000", desc:"Compact loveseat perfect for studio apartments. Multiple colours.", badge:"", icon:"🛋️" },
-  ],
-  beds: [
-    { name:"Royal King Bed Frame", cat:"Beds", price:"KES 38,000", desc:"Solid mahogany king bed with upholstered headboard. Timeless design.", badge:"hot", icon:"🛏️" },
-    { name:"Haven Queen Platform Bed", cat:"Beds", price:"KES 29,500", desc:"Low-profile queen bed with integrated storage drawers underneath.", badge:"new", icon:"🛏️" },
-    { name:"Dream Single Bed", cat:"Beds", price:"KES 14,000", desc:"Single bed with pinewood frame. Great for children's rooms.", badge:"", icon:"🛏️" },
-    { name:"Loft Bunk Bed", cat:"Beds", price:"KES 24,000", desc:"Space-saving bunk bed. Safety rails included. Assembly provided.", badge:"", icon:"🛏️" },
-  ],
-  dining: [
-    { name:"Acacia 6-Seater Dining Set", cat:"Dining", price:"KES 55,000", desc:"Solid acacia wood table with 6 padded chairs. Indoor & outdoor use.", badge:"hot", icon:"🍽️" },
-    { name:"Glass Top 4-Seater Table", cat:"Dining", price:"KES 32,000", desc:"Tempered glass dining table. Modern minimalist aesthetic.", badge:"new", icon:"🍽️" },
-    { name:"Rustic Farm Table", cat:"Dining", price:"KES 48,000", desc:"8-seater reclaimed wood farm table. Unique grain patterns.", badge:"", icon:"🍽️" },
-    { name:"Compact 2-Seater Set", cat:"Dining", price:"KES 12,500", desc:"Perfect for studio apartments. Foldable design for easy storage.", badge:"", icon:"🍽️" },
-  ],
-  office: [
-    { name:"Executive L-Desk", cat:"Office", price:"KES 42,000", desc:"L-shaped executive desk with drawers. MDF with walnut finish.", badge:"new", icon:"💼" },
-    { name:"Ergonomic Manager Chair", cat:"Office", price:"KES 16,500", desc:"Lumbar support, adjustable height, mesh back. Imported.", badge:"hot", icon:"🪑" },
-    { name:"Home Office Desk", cat:"Office", price:"KES 14,000", desc:"Minimalist work-from-home desk. Cable management built in.", badge:"", icon:"💼" },
-    { name:"3-Door File Cabinet", cat:"Office", price:"KES 18,000", desc:"Steel filing cabinet with key lock. A4 and foolscap compatible.", badge:"", icon:"🗄️" },
-  ],
-  tvstands: [
-    { name:"Floating Walnut TV Unit", cat:"TV Stands", price:"KES 22,000", desc:"Wall-mounted TV unit. Holds up to 65". Three open shelves.", badge:"hot", icon:"📺" },
-    { name:"Corner TV Stand", cat:"TV Stands", price:"KES 14,500", desc:"Space-saving corner unit. Two cable management holes.", badge:"new", icon:"📺" },
-    { name:"Classic Sideboard Unit", cat:"TV Stands", price:"KES 28,000", desc:"Multipurpose sideboard — TV stand + storage. 1.8m wide.", badge:"", icon:"📺" },
-    { name:"Minimalist TV Console", cat:"TV Stands", price:"KES 17,000", desc:"Simple, low-profile console. Matte black or oak finish.", badge:"", icon:"📺" },
-  ],
-};
+<!-- ── ADMIN PANEL ── -->
+<div id="adminOverlay" onclick="handleOverlayClick(event)">
+  <div id="adminPanel">
+    <div class="admin-header">
+      <div class="admin-title">Nairobi <span>Luxe</span> — Admin Panel</div>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-tabs">
+      <div class="admin-tab active" onclick="switchTab('dashboard',this)">📊 Dashboard</div>
+      <div class="admin-tab" onclick="switchTab('products',this)">📦 Products</div>
+      <div class="admin-tab" onclick="switchTab('addProduct',this)">➕ Add Product</div>
+      <div class="admin-tab" onclick="switchTab('orders',this)">🛒 Orders</div>
+      <div class="admin-tab" onclick="switchTab('banners',this)">🖼️ Banners</div>
+      <div class="admin-tab" onclick="switchTab('settings',this)">⚙️ Settings</div>
+    </div>
+    <div class="admin-body">
 
-let currentCat = 'sofas';
-
-function renderProducts(cat) {
-  const grid = document.getElementById('productsGrid');
-  const label = document.getElementById('activeCategory');
-  const items = products[cat];
-  const catNames = { sofas:'Sofas', beds:'Beds', dining:'Dining Tables', office:'Office Furniture', tvstands:'TV Stands' };
-  label.textContent = catNames[cat];
-
-  grid.innerHTML = items.map(p => {
-    const msg = encodeURIComponent(`Hi, I'm interested in the ${p.name} (${p.price}). Please share more details.`);
-    const badge = p.badge === 'new'
-      ? `<div class="product-badge-new">New</div>`
-      : p.badge === 'hot'
-      ? `<div class="product-badge-hot">🔥 Popular</div>`
-      : '';
-    return `
-      <div class="product-card fade-up visible">
-        <div class="product-img-wrap">
-          <span style="font-size:4rem">${p.icon}</span>
-          ${badge}
+      <!-- DASHBOARD -->
+      <div class="admin-section active" id="tab-dashboard">
+        <div class="admin-stats-grid">
+          <div class="admin-stat"><div class="admin-stat-label">Total Products</div><div class="admin-stat-val" id="statProducts">20</div><div class="admin-stat-delta">↑ 3 this week</div></div>
+          <div class="admin-stat"><div class="admin-stat-label">WhatsApp Enquiries</div><div class="admin-stat-val">47</div><div class="admin-stat-delta">↑ 12 today</div></div>
+          <div class="admin-stat"><div class="admin-stat-label">Orders This Month</div><div class="admin-stat-val">23</div><div class="admin-stat-delta">↑ 8 vs last month</div></div>
+          <div class="admin-stat"><div class="admin-stat-label">Revenue (Est.)</div><div class="admin-stat-val">1.2M</div><div class="admin-stat-delta" style="color:var(--gold)">KES this month</div></div>
         </div>
-        <div class="product-body">
-          <div class="product-cat">${p.cat}</div>
-          <div class="product-name">${p.name}</div>
-          <div class="product-desc">${p.desc}</div>
-          <div class="product-footer">
-            <div class="product-price">${p.price} <small>/ piece</small></div>
-            <button class="btn-ask" onclick="askPrice('${p.name}','${p.price}')">
-              💬 Ask Price
-            </button>
+        <div class="admin-card">
+          <div class="admin-card-title">Recent Activity</div>
+          <div style="display:flex;flex-direction:column;gap:0.8rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border-radius:8px">
+              <div><div style="font-size:0.85rem;color:rgba(245,240,232,0.8)">New enquiry — Milano Sofa</div><div style="font-size:0.72rem;color:var(--text-muted)">2 mins ago via WhatsApp</div></div>
+              <span class="tbl-badge active">New</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border-radius:8px">
+              <div><div style="font-size:0.85rem;color:rgba(245,240,232,0.8)">Order confirmed — Royal King Bed</div><div style="font-size:0.72rem;color:var(--text-muted)">14 mins ago</div></div>
+              <span class="tbl-badge active">Confirmed</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border-radius:8px">
+              <div><div style="font-size:0.85rem;color:rgba(245,240,232,0.8)">Delivered — Acacia 6-Seater</div><div style="font-size:0.72rem;color:var(--text-muted)">1 hour ago · Kilimani</div></div>
+              <span class="tbl-badge" style="background:rgba(100,150,200,0.15);color:#7eb8e8">Delivered</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border-radius:8px">
+              <div><div style="font-size:0.85rem;color:rgba(245,240,232,0.8)">New review — 5 stars by Lucy A.</div><div style="font-size:0.72rem;color:var(--text-muted)">3 hours ago</div></div>
+              <span class="tbl-badge active">Review</span>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Top Products This Month</div>
+          <table class="products-table">
+            <thead><tr><th>Product</th><th>Category</th><th>Enquiries</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Milano L-Shaped Sofa</td><td>Sofas</td><td>18</td><td><span class="tbl-badge active">Hot</span></td></tr>
+              <tr><td>Royal King Bed Frame</td><td>Beds</td><td>12</td><td><span class="tbl-badge active">Active</span></td></tr>
+              <tr><td>Executive L-Desk</td><td>Office</td><td>9</td><td><span class="tbl-badge active">Active</span></td></tr>
+              <tr><td>Acacia 6-Seater Set</td><td>Dining</td><td>8</td><td><span class="tbl-badge active">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTS LIST -->
+      <div class="admin-section" id="tab-products">
+        <div class="admin-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.8rem">
+            <div class="admin-card-title" style="margin:0">All Products</div>
+            <div style="display:flex;gap:0.6rem">
+              <input style="background:rgba(255,255,255,0.05);border:1px solid var(--admin-border);border-radius:8px;padding:0.5rem 0.9rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;width:180px" placeholder="Search products..." id="productSearch" oninput="filterAdminProducts()">
+              <select id="catFilter" style="background:rgba(255,255,255,0.05);border:1px solid var(--admin-border);border-radius:8px;padding:0.5rem 0.9rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none" onchange="filterAdminProducts()">
+                <option value="">All Categories</option>
+                <option value="sofas">Sofas</option>
+                <option value="beds">Beds</option>
+                <option value="dining">Dining</option>
+                <option value="office">Office</option>
+                <option value="tvstands">TV Stands</option>
+              </select>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="products-table" id="adminProductsTable">
+              <thead><tr><th>Icon</th><th>Name</th><th>Category</th><th>Price</th><th>Badge</th><th>Actions</th></tr></thead>
+              <tbody id="adminProductsTbody"></tbody>
+            </table>
           </div>
         </div>
       </div>
-    `;
+
+      <!-- ADD PRODUCT -->
+      <div class="admin-section" id="tab-addProduct">
+        <div class="admin-success" id="addSuccess">✅ Product added successfully! It's now live on the website.</div>
+        <div class="admin-card">
+          <div class="admin-card-title">Add New Product</div>
+          <div class="form-row">
+            <div class="form-group"><label>Product Name</label><input type="text" id="newName" placeholder="e.g. Milano L-Shaped Sofa"></div>
+            <div class="form-group"><label>Category</label>
+              <select id="newCat">
+                <option value="sofas">Sofas</option>
+                <option value="beds">Beds</option>
+                <option value="dining">Dining</option>
+                <option value="office">Office</option>
+                <option value="tvstands">TV Stands</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Price (KES)</label><input type="text" id="newPrice" placeholder="e.g. 45,000"></div>
+            <div class="form-group"><label>Badge</label>
+              <select id="newBadge">
+                <option value="">None</option>
+                <option value="new">New Arrival</option>
+                <option value="hot">Hot / Popular</option>
+                <option value="sale">On Sale</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:1rem"><label>Description</label><textarea id="newDesc" placeholder="Describe the product — materials, dimensions, colour options..."></textarea></div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Product Icon / Emoji</label>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.5rem" id="emojiPicker">
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'🛋️')">🛋️</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'🛏️')">🛏️</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'🍽️')">🍽️</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'💼')">💼</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'📺')">📺</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'🪑')">🪑</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'🗄️')">🗄️</span>
+              <span style="cursor:pointer;font-size:1.8rem;padding:0.3rem;border-radius:8px;border:2px solid transparent;transition:all 0.2s" onclick="selectEmoji(this,'🪞')">🪞</span>
+            </div>
+            <input type="hidden" id="newEmoji" value="🛋️">
+          </div>
+          <button class="admin-btn" onclick="addProduct()">➕ Add Product to Website</button>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="admin-section" id="tab-orders">
+        <div class="admin-card">
+          <div class="admin-card-title">Recent Orders / Enquiries</div>
+          <div class="orders-list" id="ordersList">
+            <div class="order-item">
+              <div class="order-info"><h4>Milano L-Shaped Sofa × 1</h4><p>📱 +254 712 345 678 · KES 45,000 · Kilimani, Nairobi</p></div>
+              <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+                <span class="order-status status-pending">Pending</span>
+                <button class="tbl-btn" onclick="updateOrderStatus(this,'Confirmed')">Confirm</button>
+                <a class="tbl-btn" href="https://wa.me/254712345678?text=Hi!+Your+Milano+Sofa+order+is+confirmed+and+will+be+delivered+tomorrow." target="_blank">💬 Reply</a>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="order-info"><h4>Royal King Bed Frame × 1</h4><p>📱 +254 722 876 543 · KES 38,000 · Westlands, Nairobi</p></div>
+              <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+                <span class="order-status status-confirmed">Confirmed</span>
+                <button class="tbl-btn" onclick="updateOrderStatus(this,'Delivered')">Mark Delivered</button>
+                <a class="tbl-btn" href="https://wa.me/254722876543" target="_blank">💬 Reply</a>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="order-info"><h4>Acacia 6-Seater Set × 1</h4><p>📱 +254 733 111 222 · KES 55,000 · South B, Nairobi</p></div>
+              <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+                <span class="order-status status-delivered">Delivered</span>
+                <a class="tbl-btn" href="https://wa.me/254733111222?text=Hi!+Hope+you+love+your+new+dining+set!+Please+leave+us+a+review." target="_blank">💬 Request Review</a>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="order-info"><h4>Executive L-Desk × 1</h4><p>📱 +254 700 987 654 · KES 42,000 · Karen, Nairobi</p></div>
+              <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+                <span class="order-status status-pending">Pending</span>
+                <button class="tbl-btn" onclick="updateOrderStatus(this,'Confirmed')">Confirm</button>
+                <a class="tbl-btn" href="https://wa.me/254700987654" target="_blank">💬 Reply</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Add Manual Order</div>
+          <div class="form-row">
+            <div class="form-group"><label>Customer Name</label><input type="text" id="orderName" placeholder="e.g. Jane Muthoni"></div>
+            <div class="form-group"><label>Phone Number</label><input type="text" id="orderPhone" placeholder="e.g. 0712 345 678"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Product</label><input type="text" id="orderProduct" placeholder="e.g. Milano L-Sofa"></div>
+            <div class="form-group"><label>Amount (KES)</label><input type="text" id="orderAmount" placeholder="e.g. 45,000"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:1rem"><label>Delivery Location</label><input type="text" id="orderLocation" placeholder="e.g. Kilimani, Nairobi"></div>
+          <button class="admin-btn" onclick="addOrder()">➕ Add Order</button>
+        </div>
+      </div>
+
+      <!-- BANNERS -->
+      <div class="admin-section" id="tab-banners">
+        <div class="admin-card">
+          <div class="admin-card-title">Hero Slides (4 Active)</div>
+          <div style="display:flex;flex-direction:column;gap:0.8rem" id="bannerList">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--admin-border)">
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.8rem">🛋️</span><div><div style="font-size:0.88rem;color:rgba(245,240,232,0.9)">Sofa Collection Slide</div><div style="font-size:0.72rem;color:var(--text-muted)">Slide 1 — "Crafted for the Modern Kenyan Home"</div></div></div>
+              <div style="display:flex;gap:0.5rem"><button class="tbl-btn">Edit</button><button class="tbl-btn" style="color:#c06060">Hide</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--admin-border)">
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.8rem">🛏️</span><div><div style="font-size:0.88rem;color:rgba(245,240,232,0.9)">Bedroom Collection Slide</div><div style="font-size:0.72rem;color:var(--text-muted)">Slide 2 — "Sleep in Luxury Every Night"</div></div></div>
+              <div style="display:flex;gap:0.5rem"><button class="tbl-btn">Edit</button><button class="tbl-btn" style="color:#c06060">Hide</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--admin-border)">
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.8rem">🍽️</span><div><div style="font-size:0.88rem;color:rgba(245,240,232,0.9)">Dining Collection Slide</div><div style="font-size:0.72rem;color:var(--text-muted)">Slide 3 — "Dine Together, Live Together"</div></div></div>
+              <div style="display:flex;gap:0.5rem"><button class="tbl-btn">Edit</button><button class="tbl-btn" style="color:#c06060">Hide</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--admin-border)">
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.8rem">💼</span><div><div style="font-size:0.88rem;color:rgba(245,240,232,0.9)">Office Collection Slide</div><div style="font-size:0.72rem;color:var(--text-muted)">Slide 4 — "Your Office, Elevated"</div></div></div>
+              <div style="display:flex;gap:0.5rem"><button class="tbl-btn">Edit</button><button class="tbl-btn" style="color:#c06060">Hide</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Announcement Bar Text</div>
+          <div class="form-group" style="margin-bottom:1rem"><label>Add Announcement</label><input type="text" id="newAnnounce" placeholder="e.g. 🎉 New arrivals this weekend — WhatsApp us!"></div>
+          <button class="admin-btn" onclick="addAnnouncement()">Add to Banner</button>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Promo Cards (6 Active)</div>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">Edit the promotional banners shown in the Deals & Promotions section.</p>
+          <button class="admin-btn secondary">+ Add Promo Card</button>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="admin-section" id="tab-settings">
+        <div class="admin-card">
+          <div class="admin-card-title">Business Settings</div>
+          <div class="form-row">
+            <div class="form-group"><label>Business Name</label><input type="text" value="Nairobi Luxe Furniture"></div>
+            <div class="form-group"><label>WhatsApp Number</label><input type="text" value="+254 700 000 000"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>M-Pesa Paybill</label><input type="text" value="522533"></div>
+            <div class="form-group"><label>M-Pesa Account</label><input type="text" value="Phone Number"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:1rem"><label>Showroom Address</label><input type="text" value="Westlands Square, Ring Road, 1st Floor Unit 12, Nairobi"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Opening Hours (Weekday)</label><input type="text" value="8:00am – 7:00pm"></div>
+            <div class="form-group"><label>Opening Hours (Weekend)</label><input type="text" value="10:00am – 5:00pm"></div>
+          </div>
+          <button class="admin-btn" onclick="saveSettings()">💾 Save Settings</button>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Feature Toggles</div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">WhatsApp Float Button</div><div class="toggle-sub">Show the floating WhatsApp button</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Announcement Bar</div><div class="toggle-sub">Show scrolling announcements at top</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Promo Banners</div><div class="toggle-sub">Show deals & promotions section</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Customer Reviews</div><div class="toggle-sub">Show testimonials section</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Newsletter Section</div><div class="toggle-sub">Show email subscription form</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">Admin Security</div>
+          <div class="form-row">
+            <div class="form-group"><label>New Password</label><input type="password" placeholder="Enter new password"></div>
+            <div class="form-group"><label>Confirm Password</label><input type="password" placeholder="Confirm new password"></div>
+          </div>
+          <button class="admin-btn secondary">🔒 Update Password</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PRELOADER ──
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('preloader').classList.add('hide')},2000);
+});
+
+// ── CUSTOM CURSOR ──
+const cur=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+  ring.style.left=e.clientX+'px'; ring.style.top=e.clientY+'px';
+});
+document.querySelectorAll('a,button,.cat-pill,.product-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='60px';ring.style.height='60px';ring.style.opacity='0.3'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='38px';ring.style.height='38px';ring.style.opacity='0.6'});
+});
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
+});
+function scrollTop(){window.scrollTo({top:0,behavior:'smooth'})}
+
+// ── MOBILE MENU ──
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu'),h=document.getElementById('hamburger');
+  m.classList.toggle('open'); h.classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+// ── HERO SLIDER ──
+let heroIdx=0, heroTimer;
+const heroSlides=document.querySelectorAll('.hero-slide');
+const dotsEl=document.getElementById('heroDots');
+heroSlides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='hero-dot'+(i===0?' active':'');
+  d.onclick=()=>goHero(i);
+  dotsEl.appendChild(d);
+});
+function goHero(n){
+  heroSlides[heroIdx].classList.remove('active');
+  document.querySelectorAll('.hero-dot')[heroIdx].classList.remove('active');
+  heroIdx=(n+heroSlides.length)%heroSlides.length;
+  heroSlides[heroIdx].classList.add('active');
+  document.querySelectorAll('.hero-dot')[heroIdx].classList.add('active');
+}
+function heroNav(dir){clearInterval(heroTimer);goHero(heroIdx+dir);startHeroTimer()}
+function startHeroTimer(){heroTimer=setInterval(()=>goHero(heroIdx+1),5500)}
+startHeroTimer();
+
+// ── COUNTER ANIMATION ──
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseInt(el.dataset.count), plus=el.textContent.includes('+');
+    let current=0;
+    const step=Math.ceil(target/50);
+    const t=setInterval(()=>{
+      current=Math.min(current+step,target);
+      el.textContent=current+(plus?'+':'');
+      if(current>=target)clearInterval(t);
+    },30);
+  });
+}
+setTimeout(animateCounters,2200);
+
+// ── PROMO SLIDER ──
+let promoIdx=0;
+const promoTrack=document.getElementById('promoTrack');
+const promoDots=document.getElementById('promoNav');
+const promoCards=promoTrack.children.length;
+const promoVisible=()=>window.innerWidth<600?1:window.innerWidth<900?2:window.innerWidth<1200?3:3;
+for(let i=0;i<Math.ceil(promoCards/promoVisible());i++){
+  const d=document.createElement('div');
+  d.className='promo-dot'+(i===0?' active':'');
+  d.onclick=()=>{clearInterval(promoTimer);promoIdx=i;updatePromo();startPromoTimer()};
+  promoDots.appendChild(d);
+}
+function updatePromo(){
+  const cardW=promoTrack.children[0]?.offsetWidth||340;
+  const gap=parseFloat(getComputedStyle(promoTrack).gap)||24;
+  const offset=promoIdx*(cardW+gap)*promoVisible();
+  promoTrack.style.transform=`translateX(-${offset}px)`;
+  document.querySelectorAll('.promo-dot').forEach((d,i)=>d.classList.toggle('active',i===promoIdx));
+}
+function promoNav(dir){
+  clearInterval(promoTimer);
+  const maxIdx=Math.ceil(promoCards/promoVisible())-1;
+  promoIdx=Math.max(0,Math.min(promoIdx+dir,maxIdx));
+  updatePromo(); startPromoTimer();
+}
+let promoTimer;
+function startPromoTimer(){promoTimer=setInterval(()=>{const maxIdx=Math.ceil(promoCards/promoVisible())-1;promoIdx=promoIdx>=maxIdx?0:promoIdx+1;updatePromo()},4000)}
+startPromoTimer();
+
+// ── PRODUCTS DATA ──
+let allProducts=[
+  {id:1,name:"Milano L-Shaped Sofa",cat:"sofas",price:"KES 45,000",desc:"5-seater L-sofa in premium fabric. Stain-resistant. Available in grey, beige & chocolate.",badge:"hot",icon:"🛋️"},
+  {id:2,name:"Monaco 3-Seater Sofa",cat:"sofas",price:"KES 28,500",desc:"Classic 3-seater with high-density foam. Multiple colour options.",badge:"",icon:"🛋️"},
+  {id:3,name:"Serengeti Corner Sofa",cat:"sofas",price:"KES 62,000",desc:"Luxury corner unit with chaise lounge. Linen fabric, solid wood legs.",badge:"new",icon:"🛋️"},
+  {id:4,name:"Urban 2-Seater Loveseat",cat:"sofas",price:"KES 18,000",desc:"Compact loveseat for apartments. Velvet or linen upholstery.",badge:"",icon:"🛋️"},
+  {id:5,name:"Royal King Bed Frame",cat:"beds",price:"KES 38,000",desc:"Solid mahogany king bed with upholstered headboard. Timeless design.",badge:"hot",icon:"🛏️"},
+  {id:6,name:"Haven Queen Platform Bed",cat:"beds",price:"KES 29,500",desc:"Low-profile queen bed with built-in storage drawers.",badge:"new",icon:"🛏️"},
+  {id:7,name:"Dream Single Bed",cat:"beds",price:"KES 14,000",desc:"Pinewood single bed. Great for children's rooms.",badge:"",icon:"🛏️"},
+  {id:8,name:"Loft Bunk Bed",cat:"beds",price:"KES 24,000",desc:"Space-saving bunk bed with safety rails. Assembly included.",badge:"",icon:"🛏️"},
+  {id:9,name:"Acacia 6-Seater Dining Set",cat:"dining",price:"KES 55,000",desc:"Solid acacia wood table with 6 padded chairs. Indoor & outdoor.",badge:"hot",icon:"🍽️"},
+  {id:10,name:"Glass Top 4-Seater Table",cat:"dining",price:"KES 32,000",desc:"Tempered glass dining table. Modern minimalist aesthetic.",badge:"new",icon:"🍽️"},
+  {id:11,name:"Rustic Farm Table",cat:"dining",price:"KES 48,000",desc:"8-seater reclaimed wood farm table. Unique grain patterns.",badge:"",icon:"🍽️"},
+  {id:12,name:"Compact 2-Seater Set",cat:"dining",price:"KES 12,500",desc:"Studio apartment dining set. Foldable for easy storage.",badge:"sale",icon:"🍽️"},
+  {id:13,name:"Executive L-Desk",cat:"office",price:"KES 42,000",desc:"L-shaped executive desk with drawers. MDF walnut finish.",badge:"new",icon:"💼"},
+  {id:14,name:"Ergonomic Manager Chair",cat:"office",price:"KES 16,500",desc:"Lumbar support, adjustable height, mesh back. Premium import.",badge:"hot",icon:"🪑"},
+  {id:15,name:"Home Office Desk",cat:"office",price:"KES 14,000",desc:"Minimalist WFH desk. Built-in cable management.",badge:"",icon:"💼"},
+  {id:16,name:"3-Door Filing Cabinet",cat:"office",price:"KES 18,000",desc:"Steel filing cabinet with key lock. A4 and foolscap compatible.",badge:"",icon:"🗄️"},
+  {id:17,name:"Floating Walnut TV Unit",cat:"tvstands",price:"KES 22,000",desc:"Wall-mounted unit. Holds up to 65\". Three open shelves.",badge:"hot",icon:"📺"},
+  {id:18,name:"Corner TV Stand",cat:"tvstands",price:"KES 14,500",desc:"Space-saving corner unit. Built-in cable management.",badge:"new",icon:"📺"},
+  {id:19,name:"Classic Sideboard Unit",cat:"tvstands",price:"KES 28,000",desc:"Multipurpose sideboard. 1.8m wide. TV stand + storage.",badge:"",icon:"📺"},
+  {id:20,name:"Minimalist TV Console",cat:"tvstands",price:"KES 17,000",desc:"Low-profile console. Matte black or oak finish.",badge:"",icon:"📺"},
+];
+let selectedEmoji='🛋️';
+
+function renderProducts(filter='all'){
+  const grid=document.getElementById('productsGrid');
+  const filtered=filter==='all'?allProducts:allProducts.filter(p=>p.cat===filter);
+  grid.innerHTML=filtered.map(p=>{
+    const msg=encodeURIComponent(`Hi, I'm interested in the ${p.name} (${p.price}). Please share more details and confirm availability.`);
+    const badgeHtml=p.badge==='new'?'<div class="product-badge badge-new">New</div>':p.badge==='hot'?'<div class="product-badge badge-hot">🔥 Popular</div>':p.badge==='sale'?'<div class="product-badge badge-sale">Sale</div>':'';
+    const catLabels={sofas:'Sofas',beds:'Beds',dining:'Dining',office:'Office',tvstands:'TV Stands'};
+    return `<div class="product-card fade-up visible" style="transition-delay:${Math.random()*0.2}s">
+      <div class="product-img-wrap">
+        <span class="product-emoji">${p.icon}</span>
+        ${badgeHtml}
+        <div class="product-overlay"><a class="overlay-btn" href="https://wa.me/254700000000?text=${msg}" target="_blank">💬 Ask Price</a></div>
+        <button class="wishlist-btn" onclick="toggleWishlist(this)" title="Save">🤍</button>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">${catLabels[p.cat]||p.cat}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">${p.price} <small>/ piece</small></div>
+          <button class="btn-ask" onclick="askPrice('${p.name}','${p.price}')">💬 Ask Price</button>
+        </div>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function askPrice(name, price) {
-  const msg = encodeURIComponent(`Hi, I'm interested in the ${name} (${price}). Could you please share more details and confirm availability?`);
-  window.open(`https://wa.me/254700000000?text=${msg}`, '_blank');
-}
-
-function filterProducts(cat, el) {
-  currentCat = cat;
-  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+function filterProducts(cat,el){
+  document.querySelectorAll('.cat-pill').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   renderProducts(cat);
 }
 
-// Init
-renderProducts('sofas');
-
-// Mobile menu
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
-function closeMenu() {
-  document.getElementById('mobileMenu').classList.remove('open');
+function askPrice(name,price){
+  const msg=encodeURIComponent(`Hi, I'm interested in the ${name} (${price}). Could you please confirm availability and share more details?`);
+  window.open(`https://wa.me/254700000000?text=${msg}`,'_blank');
 }
 
-// Scroll fade-in
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+function toggleWishlist(btn){
+  btn.classList.toggle('liked');
+  btn.textContent=btn.classList.contains('liked')?'❤️':'🤍';
+}
 
-// Dynamic fade-up observe for product cards
-const mutObs = new MutationObserver(() => {
-  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => obs.observe(el));
-});
-mutObs.observe(document.getElementById('productsGrid'), { childList: true });
+renderProducts('all');
+
+// ── FAQ ──
+function toggleFaq(el){el.classList.toggle('open')}
+
+// ── SCROLL ANIMATIONS ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:0.1});
+document.querySelectorAll('.fade-up,.fade-left,.fade-right').forEach(el=>observer.observe(el));
+
+// ── ADMIN PANEL ──
+function openAdmin(){document.getElementById('adminOverlay').classList.add('open');renderAdminProducts()}
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('open')}
+function handleOverlayClick(e){if(e.target===document.getElementById('adminOverlay'))closeAdmin()}
+
+function switchTab(id,el){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+function renderAdminProducts(){
+  const tbody=document.getElementById('adminProductsTbody');
+  const search=(document.getElementById('productSearch')?.value||'').toLowerCase();
+  const catF=document.getElementById('catFilter')?.value||'';
+  const filtered=allProducts.filter(p=>
+    (!catF||p.cat===catF)&&(!search||p.name.toLowerCase().includes(search))
+  );
+  tbody.innerHTML=filtered.map(p=>`<tr>
+    <td style="font-size:1.4rem">${p.icon}</td>
+    <td><strong style="color:rgba(245,240,232,0.9)">${p.name}</strong></td>
+    <td style="text-transform:capitalize">${p.cat}</td>
+    <td>${p.price}</td>
+    <td>${p.badge?`<span class="tbl-badge active">${p.badge}</span>`:'-'}</td>
+    <td><div class="tbl-actions">
+      <button class="tbl-btn" onclick="editProduct(${p.id})">Edit</button>
+      <button class="tbl-btn danger" onclick="deleteProduct(${p.id},this)">Delete</button>
+    </div></td>
+  </tr>`).join('');
+  document.getElementById('statProducts').textContent=allProducts.length;
+}
+
+function filterAdminProducts(){renderAdminProducts()}
+
+function editProduct(id){
+  const p=allProducts.find(x=>x.id===id);
+  if(!p)return;
+  document.getElementById('newName').value=p.name;
+  document.getElementById('newPrice').value=p.price.replace('KES ','');
+  document.getElementById('newCat').value=p.cat;
+  document.getElementById('newBadge').value=p.badge;
+  document.getElementById('newDesc').value=p.desc;
+  document.getElementById('newEmoji').value=p.icon;
+  selectedEmoji=p.icon;
+  switchTab('addProduct',document.querySelectorAll('.admin-tab')[2]);
+  allProducts=allProducts.filter(x=>x.id!==id);
+}
+
+function deleteProduct(id,btn){
+  if(!confirm('Delete this product?'))return;
+  allProducts=allProducts.filter(p=>p.id!==id);
+  btn.closest('tr').remove();
+  renderProducts('all');
+  document.getElementById('statProducts').textContent=allProducts.length;
+}
+
+function selectEmoji(el,emoji){
+  selectedEmoji=emoji;
+  document.getElementById('newEmoji').value=emoji;
+  document.querySelectorAll('#emojiPicker span').forEach(s=>s.style.borderColor='transparent');
+  el.style.borderColor='var(--gold)';
+}
+
+function addProduct(){
+  const name=document.getElementById('newName').value.trim();
+  const price=document.getElementById('newPrice').value.trim();
+  const cat=document.getElementById('newCat').value;
+  const badge=document.getElementById('newBadge').value;
+  const desc=document.getElementById('newDesc').value.trim();
+  if(!name||!price||!desc){alert('Please fill in Name, Price and Description.');return;}
+  const newP={id:Date.now(),name,cat,price:`KES ${price}`,desc,badge,icon:selectedEmoji};
+  allProducts.push(newP);
+  renderProducts('all');
+  document.getElementById('newName').value='';
+  document.getElementById('newPrice').value='';
+  document.getElementById('newDesc').value='';
+  document.getElementById('newBadge').value='';
+  const s=document.getElementById('addSuccess');
+  s.classList.add('show');
+  setTimeout(()=>s.classList.remove('show'),3500);
+  document.getElementById('statProducts').textContent=allProducts.length;
+}
+
+function addOrder(){
+  const name=document.getElementById('orderName').value.trim();
+  const phone=document.getElementById('orderPhone').value.trim();
+  const product=document.getElementById('orderProduct').value.trim();
+  const amount=document.getElementById('orderAmount').value.trim();
+  const location=document.getElementById('orderLocation').value.trim();
+  if(!name||!product)return;
+  const list=document.getElementById('ordersList');
+  const item=document.createElement('div');
+  item.className='order-item';
+  item.innerHTML=`<div class="order-info"><h4>${product} × 1</h4><p>📱 ${phone} · ${amount?'KES '+amount:''} · ${location}</p></div>
+    <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+      <span class="order-status status-pending">Pending</span>
+      <button class="tbl-btn" onclick="updateOrderStatus(this,'Confirmed')">Confirm</button>
+      <a class="tbl-btn" href="https://wa.me/${phone.replace(/\D/g,'')}" target="_blank">💬 Reply</a>
+    </div>`;
+  list.prepend(item);
+  ['orderName','orderPhone','orderProduct','orderAmount','orderLocation'].forEach(id=>document.getElementById(id).value='');
+}
+
+function updateOrderStatus(btn,newStatus){
+  const statusEl=btn.closest('div').querySelector('.order-status');
+  statusEl.className='order-status';
+  if(newStatus==='Confirmed'){statusEl.classList.add('status-confirmed');statusEl.textContent='Confirmed';btn.textContent='Mark Delivered';btn.onclick=()=>updateOrderStatus(btn,'Delivered')}
+  else if(newStatus==='Delivered'){statusEl.classList.add('status-delivered');statusEl.textContent='Delivered';btn.remove()}
+}
+
+function addAnnouncement(){
+  const val=document.getElementById('newAnnounce').value.trim();
+  if(!val)return;
+  const inner=document.querySelector('.announce-inner');
+  [0,1].forEach(()=>{const s=document.createElement('span');s.textContent=val;inner.appendChild(s)});
+  document.getElementById('newAnnounce').value='';
+}
+
+function saveSettings(){
+  const btn=event.target;
+  btn.textContent='✅ Saved!';
+  setTimeout(()=>btn.textContent='💾 Save Settings',2000);
+}
+
+function subscribeNewsletter(){
+  const email=document.getElementById('newsletterEmail').value;
+  if(!email.includes('@'))return;
+  document.getElementById('newsletterMsg').style.display='block';
+  document.getElementById('newsletterEmail').value='';
+}
 </script>
 </body>
 </html>
