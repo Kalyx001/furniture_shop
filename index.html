@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,6 +83,8 @@ nav.scrolled{top:0;box-shadow:0 4px 30px rgba(44,33,24,0.08)}
 .stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem}
 .hero-right{position:relative;overflow:hidden}
 .hero-visual{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+.hero-banner-img{max-width:62%;height:auto;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.45);object-fit:cover;z-index:1}
+.hero-visual .hero-emoji{z-index:1}
 .hero-badge{position:absolute;bottom:2.5rem;left:2rem;background:rgba(250,248,244,0.95);backdrop-filter:blur(8px);padding:1rem 1.4rem;border-radius:12px;border:1px solid var(--border);animation:badgeFloat 3s ease-in-out infinite}
 @keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .badge-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em}
@@ -162,6 +163,8 @@ section.content{padding:6rem 8%}
 /* ABOUT */
 #about{background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
 .about-main-img{border-radius:20px;overflow:hidden;background:linear-gradient(135deg,var(--wood-light),var(--wood));aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:6rem}
+.about-main-img img{width:100%;height:100%;object-fit:cover;display:block}
+.about-main-img .about-emoji{font-size:6rem}
 .about-float-card{position:absolute;bottom:-1.5rem;right:-1.5rem;background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.3rem 1.6rem;box-shadow:0 8px 40px rgba(44,33,24,0.1)}
 .about-visual{position:relative}
 .about-float-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--dark-brown);margin-bottom:0.5rem}
@@ -560,7 +563,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
     </div>
     <div class="hero-right" style="background:linear-gradient(135deg,#2c2118,#6b4f3a,#c4915a)">
       <div class="hero-visual" style="color:var(--cream)">
-        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🛋️</div>
+        <img id="heroImg0" class="hero-banner-img" alt="Living Room" style="display:none">
+        <div class="hero-emoji" style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🛋️</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Living Room Collection</div>
         <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 18,000</div>
       </div>
@@ -584,7 +588,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
     </div>
     <div class="hero-right" style="background:linear-gradient(135deg,#1a1612,#4a3520,#8b6340)">
       <div class="hero-visual" style="color:var(--cream)">
-        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🛏️</div>
+        <img id="heroImg1" class="hero-banner-img" alt="Bedroom" style="display:none">
+        <div class="hero-emoji" style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🛏️</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Bedroom Collection</div>
         <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 14,000</div>
       </div>
@@ -608,7 +613,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
     </div>
     <div class="hero-right" style="background:linear-gradient(135deg,#2c1f0e,#7a5a2a,#d4a45c)">
       <div class="hero-visual" style="color:var(--cream)">
-        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🍽️</div>
+        <img id="heroImg2" class="hero-banner-img" alt="Dining" style="display:none">
+        <div class="hero-emoji" style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">🍽️</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Dining Collection</div>
         <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 12,500</div>
       </div>
@@ -632,7 +638,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
     </div>
     <div class="hero-right" style="background:linear-gradient(135deg,#12100e,#3a2e24,#7a6450)">
       <div class="hero-visual" style="color:var(--cream)">
-        <div style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">💼</div>
+        <img id="heroImg3" class="hero-banner-img" alt="Office" style="display:none">
+        <div class="hero-emoji" style="font-size:8rem;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.4))">💼</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;letter-spacing:0.06em;opacity:0.9">Office Collection</div>
         <div style="font-size:0.78rem;letter-spacing:0.15em;opacity:0.5;text-transform:uppercase">From KES 14,000</div>
       </div>
@@ -699,7 +706,10 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
 <!-- ABOUT -->
 <section id="about" class="content">
   <div class="about-visual fade-left">
-    <div class="about-main-img" style="font-size:7rem">🏪</div>
+    <div class="about-main-img">
+      <img id="aboutMainImg" src="" alt="Showroom" style="display:none">
+      <div class="about-emoji">🏪</div>
+    </div>
     <div class="about-float-card">
       <div class="about-float-title">Our Showroom</div>
       <div class="about-float-row">
@@ -793,13 +803,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
     <h3>Follow Us @NairobiLuxeFurniture</h3>
     <a href="https://www.instagram.com" target="_blank">View on Instagram ↗</a>
   </div>
-  <div class="insta-grid">
-    <div class="insta-item" style="background:linear-gradient(135deg,#c4915a,#e8c99a)">🛋️<div class="insta-overlay">View Post</div></div>
-    <div class="insta-item" style="background:linear-gradient(135deg,#2c2118,#6b4f3a)">🛏️<div class="insta-overlay">View Post</div></div>
-    <div class="insta-item" style="background:linear-gradient(135deg,#8b6340,#c4915a)">🍽️<div class="insta-overlay">View Post</div></div>
-    <div class="insta-item" style="background:linear-gradient(135deg,#4a3520,#8b6340)">💼<div class="insta-overlay">View Post</div></div>
-    <div class="insta-item" style="background:linear-gradient(135deg,#e8c99a,#c4915a)">📺<div class="insta-overlay">View Post</div></div>
-    <div class="insta-item" style="background:linear-gradient(135deg,#6b4f3a,#2c2118)">🪑<div class="insta-overlay">View Post</div></div>
+  <div class="insta-grid" id="instaGridContainer">
+    <!-- Insta images will be rendered here. Admin can upload images to replace emojis. -->
   </div>
 </div>
 
@@ -1110,6 +1115,43 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
           </div>
         </div>
         <div class="admin-card">
+          <div class="admin-card-title">Slide & Banner Images</div>
+          <div style="display:grid;gap:1rem">
+            <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+              <div style="flex:1;min-width:220px">
+                <label style="font-size:0.78rem;color:var(--text-muted)">Hero Slide 1 (Sofa)</label>
+                <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleHeroUpload(0,this.files)"><div class="img-upload-text">Click to upload or drag & drop</div></div>
+                <div id="heroPreview0" style="margin-top:0.6rem"></div>
+              </div>
+              <div style="flex:1;min-width:220px">
+                <label style="font-size:0.78rem;color:var(--text-muted)">Hero Slide 2 (Bedroom)</label>
+                <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleHeroUpload(1,this.files)"><div class="img-upload-text">Click to upload or drag & drop</div></div>
+                <div id="heroPreview1" style="margin-top:0.6rem"></div>
+              </div>
+              <div style="flex:1;min-width:220px">
+                <label style="font-size:0.78rem;color:var(--text-muted)">Hero Slide 3 (Dining)</label>
+                <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleHeroUpload(2,this.files)"><div class="img-upload-text">Click to upload or drag & drop</div></div>
+                <div id="heroPreview2" style="margin-top:0.6rem"></div>
+              </div>
+              <div style="flex:1;min-width:220px">
+                <label style="font-size:0.78rem;color:var(--text-muted)">Hero Slide 4 (Office)</label>
+                <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleHeroUpload(3,this.files)"><div class="img-upload-text">Click to upload or drag & drop</div></div>
+                <div id="heroPreview3" style="margin-top:0.6rem"></div>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.78rem;color:var(--text-muted)">About Section Image</label>
+              <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleAboutUpload(this.files)"><div class="img-upload-text">Upload about image to replace the emoji</div></div>
+              <div id="aboutPreview" style="margin-top:0.6rem"></div>
+            </div>
+            <div>
+              <label style="font-size:0.78rem;color:var(--text-muted)">Instagram Gallery (up to 6)</label>
+              <div class="img-upload-area"><input type="file" accept="image/*" multiple onchange="handleInstaFiles(this.files)"><div class="img-upload-text">Upload multiple images for the Insta grid</div></div>
+              <div class="img-preview-grid" id="instaPreviewGrid" style="margin-top:0.6rem"></div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
           <div class="admin-card-title">Feature Visibility</div>
           <div class="toggle-row"><div><div class="toggle-label">WhatsApp Float Button</div><div class="toggle-sub">Show floating WhatsApp button</div></div><div class="toggle on" id="toggleWA" onclick="toggleFeature(this,'wa')"></div></div>
           <div class="toggle-row"><div><div class="toggle-label">Announcement Bar</div><div class="toggle-sub">Show scrolling announcements at top</div></div><div class="toggle on" id="toggleAnnounce" onclick="toggleFeature(this,'announce')"></div></div>
@@ -1239,6 +1281,10 @@ let uploadedImages = [];
 let activityLog = [];
 let modalImgIdx = 0;
 let modalImgList = [];
+// Banner / hero / insta images stored in localStorage (admin-uploaded)
+let heroImages = DB.get('nlf_hero_images', {0:null,1:null,2:null,3:null});
+let instaImages = DB.get('nlf_insta_images', []);
+let aboutImage = DB.get('nlf_about_image', null);
 
 function saveAllData(){
   DB.set('nlf_products', allProducts);
@@ -1779,6 +1825,71 @@ function renderImgPreviews(){
 }
 function removeImg(i){uploadedImages.splice(i,1);renderImgPreviews()}
 
+// HERO / ABOUT / INSTA IMAGE HELPERS (admin-uploaded banners)
+function renderHeroBanners(){
+  for(let i=0;i<4;i++){
+    const imgEl=document.getElementById('heroImg'+i);
+    const emojiEl=document.querySelector(`#slide${i} .hero-emoji`);
+    const src = heroImages && heroImages[i] ? heroImages[i] : null;
+    if(imgEl){
+      if(src){ imgEl.src=src; imgEl.style.display='block'; if(emojiEl) emojiEl.style.display='none'; }
+      else { imgEl.style.display='none'; if(emojiEl) emojiEl.style.display='block'; }
+    }
+    const preview=document.getElementById('heroPreview'+i);
+    if(preview){
+      preview.innerHTML = src ? `<div style="display:flex;gap:0.6rem;align-items:center"><img src="${src}" style="width:120px;height:72px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeHeroImage(${i})">Remove</button></div>` : '<div style="color:var(--text-muted)">No image</div>';
+    }
+  }
+}
+
+function handleHeroUpload(i, files){
+  if(!files || !files[0]) return;
+  const f = files[0]; if(!f.type.startsWith('image/')) return;
+  const r = new FileReader(); r.onload = e => { heroImages = heroImages || {}; heroImages[i] = e.target.result; DB.set('nlf_hero_images', heroImages); renderHeroBanners(); logActivity(`🖼️ Uploaded hero image ${i+1}`); showMsg('settingsMsg','Hero image uploaded.','success'); };
+  r.readAsDataURL(f);
+}
+
+function removeHeroImage(i){ if(!confirm('Remove this hero image?')) return; heroImages[i]=null; DB.set('nlf_hero_images',heroImages); renderHeroBanners(); logActivity(`🗑️ Removed hero image ${i+1}`); showMsg('settingsMsg','Hero image removed.','success'); }
+
+function renderAboutImage(){
+  const imgEl=document.getElementById('aboutMainImg');
+  const emojiEl=document.querySelector('.about-main-img .about-emoji');
+  if(aboutImage){ imgEl.src=aboutImage; imgEl.style.display='block'; if(emojiEl) emojiEl.style.display='none'; }
+  else { if(imgEl) imgEl.style.display='none'; if(emojiEl) emojiEl.style.display='block'; }
+  const preview=document.getElementById('aboutPreview');
+  if(preview) preview.innerHTML = aboutImage ? `<div style="display:flex;gap:0.6rem;align-items:center"><img src="${aboutImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeAboutImage()">Remove</button></div>` : '<div style="color:var(--text-muted)">No about image</div>';
+}
+
+function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ aboutImage=e.target.result; DB.set('nlf_about_image',aboutImage); renderAboutImage(); logActivity('🖼️ Uploaded about image'); showMsg('settingsMsg','About image uploaded.','success'); }; r.readAsDataURL(f); }
+function removeAboutImage(){ if(!confirm('Remove about image?')) return; aboutImage=null; DB.set('nlf_about_image', null); renderAboutImage(); logActivity('🗑️ Removed about image'); showMsg('settingsMsg','About image removed.','success'); }
+
+function handleInstaFiles(files){
+  const remaining = 6 - (instaImages.length||0);
+  if(!files || !files.length) return;
+  Array.from(files).slice(0, remaining).forEach(f=>{ if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ instaImages = instaImages || []; instaImages.push(e.target.result); DB.set('nlf_insta_images', instaImages); renderInstaGrid(); renderInstaPreviews(); logActivity('🖼️ Added insta image'); }; r.readAsDataURL(f); });
+}
+
+function renderInstaGrid(){
+  const container=document.getElementById('instaGridContainer');
+  const defaultBg = ['linear-gradient(135deg,#c4915a,#e8c99a)','linear-gradient(135deg,#2c2118,#6b4f3a)','linear-gradient(135deg,#8b6340,#c4915a)','linear-gradient(135deg,#4a3520,#8b6340)','linear-gradient(135deg,#e8c99a,#c4915a)','linear-gradient(135deg,#6b4f3a,#2c2118)'];
+  const defaultEmoji = ['🛋️','🛏️','🍽️','💼','📺','🪑'];
+  const items = [];
+  for(let i=0;i<6;i++){
+    const src = instaImages && instaImages[i] ? instaImages[i] : null;
+    if(src){ items.push(`<div class="insta-item" style="overflow:hidden;border-radius:12px"><img src="${src}" style="width:100%;height:100%;object-fit:cover"><div class="insta-overlay">View Post</div></div>`); }
+    else { items.push(`<div class="insta-item" style="background:${defaultBg[i]}">${defaultEmoji[i]}<div class="insta-overlay">View Post</div></div>`); }
+  }
+  if(container) container.innerHTML=items.join('');
+}
+
+function renderInstaPreviews(){
+  const grid=document.getElementById('instaPreviewGrid');
+  grid.innerHTML = (instaImages && instaImages.length) ? instaImages.map((s,i)=>`<div class="img-preview-item"><img src="${s}" alt="insta ${i+1}"><button class="img-preview-del" onclick="removeInstaImage(${i})">✕</button></div>`).join('') : '<div style="color:var(--text-muted)">No images yet</div>';
+}
+
+function removeInstaImage(i){ if(!confirm('Remove this insta image?')) return; instaImages.splice(i,1); DB.set('nlf_insta_images',instaImages); renderInstaGrid(); renderInstaPreviews(); logActivity('🗑️ Removed insta image'); }
+
+
 // ═══════════════════════════════════════
 // ORDERS
 // ═══════════════════════════════════════
@@ -2021,6 +2132,11 @@ function showMsg(id,msg,type='success'){
 
 // Init load
 updateLiveAnnouncementBar();
+// Render admin-uploaded banners and images
+renderHeroBanners();
+renderInstaGrid();
+renderInstaPreviews();
+renderAboutImage();
 </script>
 </body>
 </html>
