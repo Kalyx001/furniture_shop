@@ -1239,7 +1239,7 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
 // ═══════════════════════════════════════
 const DB = {
   get(k, def=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch{return def}},
-  set(k, v){try{localStorage.setItem(k, JSON.stringify(v))}catch(e){console.warn('Storage full',e)}},
+  set(k, v){try{localStorage.setItem(k, JSON.stringify(v));return true}catch(e){console.warn('Storage full',e);return false}},
   del(k){localStorage.removeItem(k)}
 };
 
@@ -1865,19 +1865,32 @@ function renderHeroBanners(){
 function handleHeroUpload(i, files){
   if(!files || !files[0]) return;
   const f = files[0]; if(!f.type.startsWith('image/')) return;
-  const r = new FileReader(); r.onload = e => { heroImages = heroImages || {}; heroImages[i] = e.target.result; renderHeroBanners(); logActivity(`🖼️ Uploaded hero image ${i+1}`); showMsg('bannerMsg','Hero image uploaded. Click Save Images to keep it after refresh.','success'); };
+  const r = new FileReader(); r.onload = e => {
+    heroImages = heroImages || {};
+    heroImages[i] = e.target.result;
+    renderHeroBanners();
+    const saved = DB.set('nlf_hero_images', heroImages);
+    saveAllData();
+    if(!saved) showMsg('bannerMsg','⚠️ Unable to save hero image to browser storage. Try a smaller file.','error');
+    else showMsg('bannerMsg','Hero image uploaded and saved.','success');
+    logActivity(`🖼️ Uploaded hero image ${i+1}`);
+  };
   r.readAsDataURL(f);
 }
 
-function removeHeroImage(i){ if(!confirm('Remove this hero image?')) return; heroImages[i]=null; renderHeroBanners(); logActivity(`🗑️ Removed hero image ${i+1}`); showMsg('settingsMsg','Hero image removed.','success'); }
+function removeHeroImage(i){ if(!confirm('Remove this hero image?')) return; heroImages[i]=null; renderHeroBanners(); const saved = DB.set('nlf_hero_images', heroImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage after removal.','error'); else showMsg('bannerMsg','Hero image removed and saved.','success'); logActivity(`🗑️ Removed hero image ${i+1}`); }
 
 function saveBannerImages(){
-  DB.set('nlf_hero_images', heroImages);
-  DB.set('nlf_about_image', aboutImage);
-  DB.set('nlf_insta_images', instaImages);
+  const okHero = DB.set('nlf_hero_images', heroImages);
+  const okAbout = DB.set('nlf_about_image', aboutImage);
+  const okInsta = DB.set('nlf_insta_images', instaImages);
   saveAllData();
-  showMsg('bannerMsg','✅ Uploaded images saved permanently.','success');
-  logActivity('💾 Uploaded banner images saved');
+  if(okHero && okAbout && okInsta){
+    showMsg('bannerMsg','✅ Uploaded images saved permanently.','success');
+    logActivity('💾 Uploaded banner images saved');
+  } else {
+    showMsg('bannerMsg','⚠️ Unable to save images. Browser storage may be full or blocked.','error');
+  }
 }
 
 function renderAboutImage(){
@@ -1889,13 +1902,13 @@ function renderAboutImage(){
   if(preview) preview.innerHTML = aboutImage ? `<div style="display:flex;gap:0.6rem;align-items:center"><img src="${aboutImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeAboutImage()">Remove</button></div>` : '<div style="color:var(--text-muted)">No about image</div>';
 }
 
-function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ aboutImage=e.target.result; renderAboutImage(); logActivity('🖼️ Uploaded about image'); showMsg('bannerMsg','About image uploaded. Click Save Images to keep it after refresh.','success'); }; r.readAsDataURL(f); }
-function removeAboutImage(){ if(!confirm('Remove about image?')) return; aboutImage=null; renderAboutImage(); logActivity('🗑️ Removed about image'); showMsg('settingsMsg','About image removed.','success'); }
+function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ aboutImage=e.target.result; renderAboutImage(); const saved = DB.set('nlf_about_image', aboutImage); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save about image to browser storage. Try a smaller file.','error'); else showMsg('bannerMsg','About image uploaded and saved.','success'); logActivity('🖼️ Uploaded about image'); }; r.readAsDataURL(f); }
+function removeAboutImage(){ if(!confirm('Remove about image?')) return; aboutImage=null; renderAboutImage(); const saved = DB.set('nlf_about_image', null); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage after removal.','error'); else showMsg('bannerMsg','About image removed and saved.','success'); logActivity('🗑️ Removed about image'); }
 
 function handleInstaFiles(files){
   const remaining = 6 - (instaImages.length||0);
   if(!files || !files.length) return;
-  Array.from(files).slice(0, remaining).forEach(f=>{ if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ instaImages = instaImages || []; instaImages.push(e.target.result); renderInstaGrid(); renderInstaPreviews(); logActivity('🖼️ Added insta image'); showMsg('bannerMsg','Instagram images uploaded. Click Save Images to keep them after refresh.','success'); }; r.readAsDataURL(f); });
+  Array.from(files).slice(0, remaining).forEach(f=>{ if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ instaImages = instaImages || []; instaImages.push(e.target.result); renderInstaGrid(); renderInstaPreviews(); const saved = DB.set('nlf_insta_images', instaImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save Instagram images to browser storage. Try smaller files.','error'); else showMsg('bannerMsg','Instagram image uploaded and saved.','success'); renderInstaGrid(); renderInstaPreviews(); logActivity('🖼️ Added insta image'); }; r.readAsDataURL(f); });
 }
 
 function renderInstaGrid(){
@@ -1916,7 +1929,7 @@ function renderInstaPreviews(){
   grid.innerHTML = (instaImages && instaImages.length) ? instaImages.map((s,i)=>`<div class="img-preview-item"><img src="${s}" alt="insta ${i+1}"><button class="img-preview-del" onclick="removeInstaImage(${i})">✕</button></div>`).join('') : '<div style="color:var(--text-muted)">No images yet</div>';
 }
 
-function removeInstaImage(i){ if(!confirm('Remove this insta image?')) return; instaImages.splice(i,1); DB.set('nlf_insta_images',instaImages); renderInstaGrid(); renderInstaPreviews(); logActivity('🗑️ Removed insta image'); }
+function removeInstaImage(i){ if(!confirm('Remove this insta image?')) return; instaImages.splice(i,1); renderInstaGrid(); renderInstaPreviews(); const saved = DB.set('nlf_insta_images',instaImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage after removing Instagram image.','error'); else showMsg('bannerMsg','Instagram image removed and saved.','success'); logActivity('🗑️ Removed insta image'); }
 
 
 // ═══════════════════════════════════════
