@@ -1237,11 +1237,65 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
 // ═══════════════════════════════════════
 // STORAGE HELPERS
 // ═══════════════════════════════════════
+// Small data (settings, products, orders) → localStorage
 const DB = {
   get(k, def=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch{return def}},
   set(k, v){try{localStorage.setItem(k, JSON.stringify(v));return true}catch(e){console.warn('Storage full',e);return false}},
   del(k){localStorage.removeItem(k)}
 };
+
+// Large image data → IndexedDB (no 5MB limit)
+const IDB = (() => {
+  const DB_NAME = 'nlf_images_db';
+  const STORE   = 'images';
+  let _db = null;
+
+  function open(){
+    return new Promise((res, rej) => {
+      if(_db){ res(_db); return; }
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = e => e.target.result.createObjectStore(STORE);
+      req.onsuccess = e => { _db = e.target.result; res(_db); };
+      req.onerror   = e => rej(e.target.error);
+    });
+  }
+
+  return {
+    async get(key, def=null){
+      try {
+        const db = await open();
+        return new Promise((res) => {
+          const tx = db.transaction(STORE,'readonly');
+          const req = tx.objectStore(STORE).get(key);
+          req.onsuccess = () => res(req.result !== undefined ? req.result : def);
+          req.onerror   = () => res(def);
+        });
+      } catch(e){ return def; }
+    },
+    async set(key, value){
+      try {
+        const db = await open();
+        return new Promise((res) => {
+          const tx = db.transaction(STORE,'readwrite');
+          const req = tx.objectStore(STORE).put(value, key);
+          req.onsuccess = () => res(true);
+          req.onerror   = () => res(false);
+        });
+      } catch(e){ return false; }
+    },
+    async del(key){
+      try {
+        const db = await open();
+        return new Promise((res) => {
+          const tx = db.transaction(STORE,'readwrite');
+          tx.objectStore(STORE).delete(key);
+          tx.oncomplete = () => res(true);
+          tx.onerror    = () => res(false);
+        });
+      } catch(e){ return false; }
+    }
+  };
+})();
 
 // ═══════════════════════════════════════
 // DEFAULT PRODUCTS
@@ -1286,19 +1340,53 @@ let uploadedImages = [];
 let activityLog = [];
 let modalImgIdx = 0;
 let modalImgList = [];
-// Banner / hero / insta images stored in localStorage (admin-uploaded)
-let heroImages = DB.get('nlf_hero_images', {0:null,1:null,2:null,3:null});
-let instaImages = DB.get('nlf_insta_images', []);
-let aboutImage = DB.get('nlf_about_image', null);
+// Banner / hero / insta images stored in IndexedDB (no 5MB limit)
+let heroImages = {0:null,1:null,2:null,3:null};
+let instaImages = [];
+let aboutImage = null;
 
 function saveAllData(){
-  DB.set('nlf_products', allProducts);
+  // Save products without images to keep localStorage lean
+  const productsLean = allProducts.map(p => ({...p, images:[]}));
+  DB.set('nlf_products', productsLean);
   DB.set('nlf_orders', allOrders);
   DB.set('nlf_admins', adminUsers);
   DB.set('nlf_settings', businessSettings);
-  DB.set('nlf_hero_images', heroImages);
-  DB.set('nlf_about_image', aboutImage);
-  DB.set('nlf_insta_images', instaImages);
+  // Images are saved directly in their handlers via IDB
+}
+
+// Load all images from IndexedDB on startup
+async function loadImagesFromIDB(){
+  const [savedHero, savedAbout, savedInsta] = await Promise.all([
+    IDB.get('nlf_hero_images', null),
+    IDB.get('nlf_about_image', null),
+    IDB.get('nlf_insta_images', null)
+  ]);
+  if(savedHero) heroImages = savedHero;
+  if(savedAbout) aboutImage = savedAbout;
+  if(savedInsta) instaImages = savedInsta;
+
+  // One-time migration from old localStorage images
+  const oldHero  = DB.get('nlf_hero_images', null);
+  const oldAbout = DB.get('nlf_about_image', null);
+  const oldInsta = DB.get('nlf_insta_images', null);
+  if(oldHero  && !savedHero)  { heroImages  = oldHero;  await IDB.set('nlf_hero_images',  heroImages);  DB.del('nlf_hero_images'); }
+  if(oldAbout && !savedAbout) { aboutImage  = oldAbout; await IDB.set('nlf_about_image',  aboutImage);  DB.del('nlf_about_image'); }
+  if(oldInsta && !savedInsta) { instaImages = oldInsta; await IDB.set('nlf_insta_images', instaImages); DB.del('nlf_insta_images'); }
+
+  // Load product images stored separately in IDB
+  const prodImgs = await IDB.get('nlf_product_images', null);
+  if(prodImgs){
+    allProducts = allProducts.map(p => ({...p, images: prodImgs[p.id] || p.images || []}));
+  }
+
+  // Render everything that depends on images
+  renderHeroBanners();
+  renderInstaGrid();
+  renderInstaPreviews();
+  renderAboutImage();
+  renderProducts();
+  renderAdminProducts();
 }
 
 // ═══════════════════════════════════════
@@ -1746,6 +1834,10 @@ function deleteProduct(id){
   if(!p||!confirm(`Delete "${p.name}"?`))return;
   allProducts=allProducts.filter(x=>x.id!==id);
   saveAllData();
+  // Update IDB product images
+  const prodImgMap={};
+  allProducts.forEach(p=>{if(p.images&&p.images.length) prodImgMap[p.id]=p.images;});
+  IDB.set('nlf_product_images',prodImgMap);
   renderProducts();
   renderAdminProducts();
   logActivity(`🗑️ Deleted product: ${p.name}`);
@@ -1776,7 +1868,16 @@ function saveProduct(){
     showMsg('addSuccess','✅ Product added and now live on the website!','success');
     clearProductForm();
   }
-  saveAllData();
+  // Save product image data to IDB separately (keeps localStorage lean)
+  const prodImgMap = {};
+  allProducts.forEach(p => { if(p.images && p.images.length) prodImgMap[p.id] = p.images; });
+  IDB.set('nlf_product_images', prodImgMap);
+  // Save products to localStorage WITHOUT images (save space)
+  const productsLean = allProducts.map(p => ({...p, images:[]}));
+  DB.set('nlf_products', productsLean);
+  DB.set('nlf_orders', allOrders);
+  DB.set('nlf_admins', adminUsers);
+  DB.set('nlf_settings', businessSettings);
   renderProducts();
   renderAdminProducts();
   refreshDashboard();
@@ -1865,31 +1966,33 @@ function renderHeroBanners(){
 function handleHeroUpload(i, files){
   if(!files || !files[0]) return;
   const f = files[0]; if(!f.type.startsWith('image/')) return;
-  const r = new FileReader(); r.onload = e => {
+  const r = new FileReader(); r.onload = async e => {
     heroImages = heroImages || {};
     heroImages[i] = e.target.result;
     renderHeroBanners();
-    const saved = DB.set('nlf_hero_images', heroImages);
+    const saved = await IDB.set('nlf_hero_images', heroImages);
     saveAllData();
-    if(!saved) showMsg('bannerMsg','⚠️ Unable to save hero image to browser storage. Try a smaller file.','error');
-    else showMsg('bannerMsg','Hero image uploaded and saved.','success');
+    if(!saved) showMsg('bannerMsg','⚠️ Unable to save hero image. Try a smaller file.','error');
+    else showMsg('bannerMsg','✅ Hero image uploaded and saved!','success');
     logActivity(`🖼️ Uploaded hero image ${i+1}`);
   };
   r.readAsDataURL(f);
 }
 
-function removeHeroImage(i){ if(!confirm('Remove this hero image?')) return; heroImages[i]=null; renderHeroBanners(); const saved = DB.set('nlf_hero_images', heroImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage after removal.','error'); else showMsg('bannerMsg','Hero image removed and saved.','success'); logActivity(`🗑️ Removed hero image ${i+1}`); }
+async function removeHeroImage(i){ if(!confirm('Remove this hero image?')) return; heroImages[i]=null; renderHeroBanners(); const saved = await IDB.set('nlf_hero_images', heroImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage.','error'); else showMsg('bannerMsg','✅ Hero image removed.','success'); logActivity(`🗑️ Removed hero image ${i+1}`); }
 
-function saveBannerImages(){
-  const okHero = DB.set('nlf_hero_images', heroImages);
-  const okAbout = DB.set('nlf_about_image', aboutImage);
-  const okInsta = DB.set('nlf_insta_images', instaImages);
+async function saveBannerImages(){
+  const [okHero, okAbout, okInsta] = await Promise.all([
+    IDB.set('nlf_hero_images', heroImages),
+    IDB.set('nlf_about_image', aboutImage),
+    IDB.set('nlf_insta_images', instaImages)
+  ]);
   saveAllData();
   if(okHero && okAbout && okInsta){
-    showMsg('bannerMsg','✅ Uploaded images saved permanently.','success');
+    showMsg('bannerMsg','✅ All images saved permanently!','success');
     logActivity('💾 Uploaded banner images saved');
   } else {
-    showMsg('bannerMsg','⚠️ Unable to save images. Browser storage may be full or blocked.','error');
+    showMsg('bannerMsg','⚠️ Some images could not be saved.','error');
   }
 }
 
@@ -1902,13 +2005,13 @@ function renderAboutImage(){
   if(preview) preview.innerHTML = aboutImage ? `<div style="display:flex;gap:0.6rem;align-items:center"><img src="${aboutImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeAboutImage()">Remove</button></div>` : '<div style="color:var(--text-muted)">No about image</div>';
 }
 
-function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ aboutImage=e.target.result; renderAboutImage(); const saved = DB.set('nlf_about_image', aboutImage); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save about image to browser storage. Try a smaller file.','error'); else showMsg('bannerMsg','About image uploaded and saved.','success'); logActivity('🖼️ Uploaded about image'); }; r.readAsDataURL(f); }
-function removeAboutImage(){ if(!confirm('Remove about image?')) return; aboutImage=null; renderAboutImage(); const saved = DB.set('nlf_about_image', null); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage after removal.','error'); else showMsg('bannerMsg','About image removed and saved.','success'); logActivity('🗑️ Removed about image'); }
+function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=async e=>{ aboutImage=e.target.result; renderAboutImage(); const saved = await IDB.set('nlf_about_image', aboutImage); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save about image. Try a smaller file.','error'); else showMsg('bannerMsg','✅ About image uploaded and saved!','success'); logActivity('🖼️ Uploaded about image'); }; r.readAsDataURL(f); }
+async function removeAboutImage(){ if(!confirm('Remove about image?')) return; aboutImage=null; renderAboutImage(); const saved = await IDB.set('nlf_about_image', null); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage.','error'); else showMsg('bannerMsg','✅ About image removed.','success'); logActivity('🗑️ Removed about image'); }
 
 function handleInstaFiles(files){
   const remaining = 6 - (instaImages.length||0);
   if(!files || !files.length) return;
-  Array.from(files).slice(0, remaining).forEach(f=>{ if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=e=>{ instaImages = instaImages || []; instaImages.push(e.target.result); renderInstaGrid(); renderInstaPreviews(); const saved = DB.set('nlf_insta_images', instaImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save Instagram images to browser storage. Try smaller files.','error'); else showMsg('bannerMsg','Instagram image uploaded and saved.','success'); renderInstaGrid(); renderInstaPreviews(); logActivity('🖼️ Added insta image'); }; r.readAsDataURL(f); });
+  Array.from(files).slice(0, remaining).forEach(f=>{ if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=async e=>{ instaImages = instaImages || []; instaImages.push(e.target.result); renderInstaGrid(); renderInstaPreviews(); const saved = await IDB.set('nlf_insta_images', instaImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save Instagram images. Try smaller files.','error'); else showMsg('bannerMsg','✅ Instagram image uploaded and saved!','success'); renderInstaGrid(); renderInstaPreviews(); logActivity('🖼️ Added insta image'); }; r.readAsDataURL(f); });
 }
 
 function renderInstaGrid(){
@@ -1932,7 +2035,7 @@ function renderInstaPreviews(){
   grid.innerHTML = (instaImages && instaImages.length) ? instaImages.map((s,i)=>`<div class="img-preview-item"><img src="${s}" alt="insta ${i+1}"><button class="img-preview-del" onclick="removeInstaImage(${i})">✕</button></div>`).join('') : '<div style="color:var(--text-muted)">No images yet</div>';
 }
 
-function removeInstaImage(i){ if(!confirm('Remove this insta image?')) return; instaImages.splice(i,1); renderInstaGrid(); renderInstaPreviews(); const saved = DB.set('nlf_insta_images',instaImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage after removing Instagram image.','error'); else showMsg('bannerMsg','Instagram image removed and saved.','success'); logActivity('🗑️ Removed insta image'); }
+async function removeInstaImage(i){ if(!confirm('Remove this insta image?')) return; instaImages.splice(i,1); renderInstaGrid(); renderInstaPreviews(); const saved = await IDB.set('nlf_insta_images',instaImages); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to update storage.','error'); else showMsg('bannerMsg','✅ Instagram image removed.','success'); logActivity('🗑️ Removed insta image'); }
 
 
 // ═══════════════════════════════════════
@@ -2217,13 +2320,25 @@ function resetToDefaults(){
   if(!confirm('Reset everything to factory defaults? All products, orders, and settings will be reset!'))return;
   allProducts=[...DEFAULT_PRODUCTS];
   allOrders=[];
+  heroImages={0:null,1:null,2:null,3:null};
+  instaImages=[];
+  aboutImage=null;
   businessSettings={bizName:'Nairobi Luxe Furniture',wa:'+254 700 000 000',paybill:'522533',email:'hello@nairobifurniture.co.ke',address:'Westlands Square, Ring Road, 1st Floor Unit 12, Nairobi',hoursWD:'8:00am – 7:00pm',hoursWE:'10:00am – 5:00pm'};
   saveAllData();
+  IDB.set('nlf_hero_images', heroImages);
+  IDB.set('nlf_about_image', null);
+  IDB.set('nlf_insta_images', []);
+  IDB.set('nlf_product_images', {});
   loadSettings();
+  renderHeroBanners();
+  renderInstaGrid();
+  renderInstaPreviews();
+  renderAboutImage();
   renderProducts();
   renderAdminProducts();
   renderOrders();
   refreshDashboard();
+  applyBizName();
   logActivity('↩️ Reset to factory defaults');
   showMsg('settingsMsg','✅ Reset to defaults complete.','success');
 }
@@ -2243,11 +2358,8 @@ function showMsg(id,msg,type='success'){
 // Init load
 updateLiveAnnouncementBar();
 applyBizName();
-// Render admin-uploaded banners and images
-renderHeroBanners();
-renderInstaGrid();
-renderInstaPreviews();
-renderAboutImage();
+// Load images from IndexedDB, then render everything
+loadImagesFromIDB();
 </script>
 </body>
 </html>
