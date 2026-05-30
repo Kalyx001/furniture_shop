@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Nairobi Luxe Furniture – Crafted for Your Space</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
   --cream:#f5f0e8;--warm-white:#faf8f4;--black:#1a1612;--dark-brown:#2c2118;--mid-brown:#6b4f3a;
@@ -460,10 +462,10 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
   nav .nav-links,nav .nav-cta,.nav-right .btn-admin{display:none}
   .hamburger{display:flex}
   .hero-slide{grid-template-columns:1fr}
-  .hero-right{min-height:50vw}
+  .hero-right{min-height:55vw}
   #about{grid-template-columns:1fr;gap:3rem;padding:4rem 5%}
   .insta-grid{grid-template-columns:repeat(3,1fr)}
-  #contact{grid-template-columns:1fr;gap:3rem}
+  #contact{grid-template-columns:1fr;gap:3rem;padding:4rem 5%}
   .faq-grid{grid-template-columns:1fr}
   .delivery-grid{grid-template-columns:1fr 1fr}
   .reviews-grid{grid-template-columns:1fr 1fr}
@@ -471,24 +473,116 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
   section.content{padding:4rem 5%}
   #delivery,#faq,#reviews,#why,#newsletter{padding:4rem 5%}
   #catalog.content{padding:4rem 5%}
-  #contact{padding:4rem 5%}
   #insta{padding:3rem 5%}
   .footer-grid{grid-template-columns:1fr;gap:2rem}
+  .mpesa-box{gap:1.5rem;padding:1.5rem}
+  .zone-table-wrap{overflow-x:auto}
+  .why-card{padding:1.5rem 1.2rem}
+  /* Admin mobile */
+  #adminPanel{max-width:100%;width:100%}
+  .admin-body{padding:1rem}
+  .admin-header{padding:0.9rem 1rem}
+  .admin-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .admin-tabs::-webkit-scrollbar{display:none}
+  .admin-tab{padding:0.75rem 1rem;font-size:0.72rem}
+  .form-row{grid-template-columns:1fr}
+  .admin-stats-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
-  .products-grid{grid-template-columns:1fr 1fr;gap:1rem}
+  /* NAV */
+  nav{padding:0.8rem 4%;top:28px}
+  .nav-logo{font-size:1.1rem}
+  .announce-bar{font-size:0.68rem}
+  /* HERO */
+  #home{height:auto;min-height:100svh}
+  .hero-slide{grid-template-columns:1fr;min-height:100svh}
+  .hero-left{padding:5rem 5% 2rem;order:1}
+  .hero-right{min-height:52vw;order:2}
+  .hero-title{font-size:2.2rem}
+  .hero-subtitle{font-size:0.88rem}
+  .hero-stats{gap:1rem;flex-wrap:wrap}
+  .stat-num{font-size:1.5rem}
+  .hero-badge{bottom:1rem;left:1rem;padding:0.7rem 1rem}
+  .badge-val{font-size:0.95rem}
+  .hero-actions{flex-direction:column;gap:0.7rem}
+  .hero-actions a{text-align:center;justify-content:center}
+  /* PRODUCTS */
+  .products-grid{grid-template-columns:1fr 1fr;gap:0.8rem}
+  .product-name{font-size:1rem}
+  .product-price{font-size:1rem}
+  /* SECTIONS */
   .why-grid{grid-template-columns:1fr}
   .delivery-grid{grid-template-columns:1fr}
   .reviews-grid{grid-template-columns:1fr}
-  .insta-grid{grid-template-columns:repeat(3,1fr)}
-  .hero-stats{gap:1rem}
-  .hero-left{padding:3rem 5% 2.5rem}
-  .admin-stats-grid{grid-template-columns:1fr 1fr}
+  .insta-grid{grid-template-columns:repeat(3,1fr);gap:0.5rem}
+  .section-title{font-size:1.8rem}
+  .features-strip{gap:1.2rem;padding:1rem 4%}
+  .feat-item p{font-size:0.7rem}
+  /* ABOUT */
+  .about-float-card{right:0;bottom:-1rem}
+  /* CONTACT */
+  .map-placeholder{height:260px}
+  /* FOOTER */
+  .footer-grid{grid-template-columns:1fr;gap:1.5rem}
+  footer{padding:3rem 5% 2rem}
+  /* PROMO */
+  .promo-card{flex:0 0 280px}
+  /* ADMIN FULL OVERHAUL */
+  #adminOverlay.open{align-items:flex-start}
+  #adminPanel{max-width:100%;width:100%;height:100svh;border-radius:0}
+  .admin-header{padding:0.75rem 1rem;flex-wrap:nowrap;gap:0.5rem}
+  .admin-title{font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+  .admin-header-right{gap:0.4rem;flex-shrink:0}
+  .admin-user-badge{display:none}
+  .admin-logout{padding:0.35rem 0.6rem;font-size:0.7rem}
+  .admin-close{width:30px;height:30px;font-size:0.85rem}
+  .admin-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--admin-border)}
+  .admin-tabs::-webkit-scrollbar{display:none}
+  .admin-tab{padding:0.65rem 0.85rem;font-size:0.68rem;letter-spacing:0.03em;flex-shrink:0}
+  .admin-body{padding:0.75rem}
+  .admin-stats-grid{grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1rem}
+  .admin-stat{padding:0.9rem}
+  .admin-stat-val{font-size:1.5rem}
+  .admin-card{padding:1rem;margin-bottom:1rem}
   .form-row{grid-template-columns:1fr}
-  #adminPanel{max-width:100%}
-  .admin-tabs{overflow-x:auto}
-  .img-preview-grid{grid-template-columns:repeat(3,1fr)}
+  .img-preview-grid{grid-template-columns:repeat(3,1fr);gap:0.5rem}
+  .img-upload-area{padding:1rem}
+  .products-table th:nth-child(1),.products-table td:nth-child(1){display:none}
+  .products-table{font-size:0.75rem}
+  .products-table th,.products-table td{padding:0.6rem 0.4rem}
+  .tbl-actions{flex-direction:column;gap:0.3rem}
+  .order-item{flex-direction:column;align-items:flex-start}
+  .modal-name{font-size:1.5rem}
+  .modal-price{font-size:1.7rem}
+  /* Mobile admin nav back button */
+  .admin-mobile-back{display:flex !important}
+  /* Auth card */
+  .auth-card{padding:1.5rem;border-radius:16px;margin:1rem}
 }
+/* Admin always full height on mobile */
+@media(max-height:700px){
+  .admin-body{padding-bottom:4rem}
+}
+/* Leaflet map tweaks */
+.leaflet-container{font-family:'DM Sans',sans-serif}
+.leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.leaflet-popup-content{margin:0.8rem 1rem;font-size:0.85rem;line-height:1.5}
+/* Touch-friendly product cards */
+@media(hover:none){
+  .product-card:hover{transform:none}
+  .product-card:active{transform:scale(0.98)}
+}
+/* Safe area for notched phones */
+@supports(padding:max(0px)){
+  nav{padding-left:max(5%,env(safe-area-inset-left));padding-right:max(5%,env(safe-area-inset-right))}
+  footer{padding-bottom:max(2rem,env(safe-area-inset-bottom))}
+  #adminPanel{padding-bottom:env(safe-area-inset-bottom)}
+  .wa-float{bottom:max(2rem,calc(env(safe-area-inset-bottom) + 1rem));right:max(2rem,env(safe-area-inset-right))}
+}
+/* Fix admin panel scroll on iOS */
+#adminPanel{-webkit-overflow-scrolling:touch}
+/* Mobile menu admin link */
+.mobile-menu-admin{display:block;font-size:1rem !important;color:var(--gold) !important;border:none !important;padding:0 !important;cursor:pointer;background:none;font-family:'Cormorant Garamond',serif;letter-spacing:0.04em}
 </style>
 </head>
 <body>
@@ -532,8 +626,11 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
     <button class="btn-admin" onclick="openAdmin()">⚙️ Admin</button>
     <a class="nav-cta" href="https://wa.me/254700000000?text=Hi!+I%27m+interested+in+your+furniture!" target="_blank">💬 WhatsApp Us</a>
   </div>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
+  <div style="display:flex;align-items:center;gap:0.5rem">
+    <button class="btn-admin" id="mobileAdminBtn" onclick="openAdmin()" style="display:none;padding:0.4rem 0.7rem;font-size:0.72rem;border-radius:2rem">⚙️</button>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
@@ -549,6 +646,7 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
   <a href="#reviews" onclick="closeMenu()">Reviews</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
   <a href="https://wa.me/254700000000" target="_blank" style="color:var(--whatsapp);border-color:rgba(37,211,102,0.2)">💬 WhatsApp Us</a>
+  <button onclick="closeMenu();openAdmin()" style="background:none;border:none;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem;text-align:left;cursor:pointer;width:100%;transition:color 0.2s">⚙ Admin</button>
 </div>
 
 <!-- HERO -->
@@ -832,8 +930,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
       <a class="btn-outline" href="tel:+254700000000">📞 Call Us Now</a>
     </div>
   </div>
-  <div class="map-placeholder fade-right" id="mapPlaceholder">
-    <!-- Rendered by renderMapPlaceholder() -->
+  <div class="map-placeholder fade-right" id="mapPlaceholder" style="padding:0;overflow:hidden;border-radius:20px;background:#e8e0d5">
+    <div id="siteMap" style="width:100%;height:100%;min-height:380px;border-radius:20px"></div>
   </div>
 </section>
 
@@ -938,7 +1036,10 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
   <!-- Admin Panel (shown when logged in) -->
   <div id="adminPanel" style="display:none">
     <div class="admin-header">
-      <div class="admin-title">Nairobi <span>Luxe</span> — Admin</div>
+      <div style="display:flex;align-items:center;gap:0.6rem;min-width:0">
+        <button class="admin-mobile-back" id="adminBackBtn" onclick="adminGoBack()" style="display:none;background:rgba(255,255,255,0.07);border:1px solid var(--admin-border);color:var(--text-muted);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;flex-shrink:0;align-items:center;justify-content:center;transition:all 0.2s">←</button>
+        <div class="admin-title" id="adminPanelTitle">Nairobi <span>Luxe</span> — Admin</div>
+      </div>
       <div class="admin-header-right">
         <div class="admin-user-badge" id="adminUserBadge">👤 admin</div>
         <button class="admin-logout" onclick="doLogout()">Sign Out</button>
@@ -1150,15 +1251,19 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
               <div id="aboutPreview" style="margin-top:0.6rem"></div>
             </div>
             <div>
-              <label style="font-size:0.78rem;color:var(--text-muted)">📍 Location / Map Image</label>
-              <p style="font-size:0.74rem;color:var(--text-muted);margin:0.3rem 0 0.6rem">Upload a screenshot or photo of your store location. It replaces the address card in the Contact section and becomes clickable.</p>
-              <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleLocationUpload(this.files)"><div class="img-upload-text">Upload map screenshot or store photo</div></div>
-              <div id="locationPreview" style="margin-top:0.6rem"></div>
-              <div style="margin-top:0.8rem;display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
-                <input style="flex:1;min-width:200px;background:rgba(255,255,255,0.05);border:1px solid var(--admin-border);border-radius:8px;padding:0.6rem 0.9rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none" type="url" id="setLocationUrl" placeholder="Google Maps link (https://maps.google.com/…)">
-                <button class="admin-btn secondary" onclick="saveLocationUrl()" style="white-space:nowrap">💾 Save Link</button>
+              <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:0.5rem">📍 Store Location Pin</label>
+              <p style="font-size:0.74rem;color:var(--text-muted);margin:0 0 0.8rem">Search your address or click directly on the map to drop a pin. The exact same map with your pin will show in the Contact section.</p>
+              <div style="display:flex;gap:0.5rem;margin-bottom:0.7rem;flex-wrap:wrap">
+                <input style="flex:1;min-width:180px;background:rgba(255,255,255,0.05);border:1px solid var(--admin-border);border-radius:8px;padding:0.6rem 0.9rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none" type="text" id="locationSearchInput" placeholder="Search address e.g. Westlands, Nairobi" onkeydown="if(event.key==='Enter')searchLocation()">
+                <button class="admin-btn" onclick="searchLocation()" style="padding:0.6rem 1rem;white-space:nowrap">🔍 Search</button>
               </div>
-              <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem">Paste your Google Maps share link above — clicking the image will open it.</p>
+              <div id="adminMapPicker" style="width:100%;height:300px;border-radius:10px;border:1px solid var(--admin-border);overflow:hidden;margin-bottom:0.7rem"></div>
+              <div id="pinnedLocationInfo" style="font-size:0.78rem;color:var(--wood-light);background:rgba(255,255,255,0.04);border:1px solid var(--admin-border);border-radius:8px;padding:0.6rem 0.9rem;margin-bottom:0.7rem;display:none"></div>
+              <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+                <button class="admin-btn" onclick="savePinnedLocation()" id="savePinBtn" style="opacity:0.5;pointer-events:none">📍 Save Pin to Site</button>
+                <button class="admin-btn secondary" onclick="clearPinnedLocation()">✕ Clear Pin</button>
+              </div>
+              <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.5rem">After saving, the Contact section map will show your exact pin for visitors.</p>
             </div>
             <div>
               <label style="font-size:0.78rem;color:var(--text-muted)">Instagram Gallery (up to 6)</label>
@@ -1358,8 +1463,7 @@ let modalImgList = [];
 let heroImages = {0:null,1:null,2:null,3:null};
 let instaImages = [];
 let aboutImage = null;
-let locationImage = null;
-let locationUrl = '';
+// Location now stored as {lat,lng,label} via DB.set('nlf_pinned_location')
 
 function saveAllData(){
   // Save products without images to keep localStorage lean
@@ -1373,17 +1477,14 @@ function saveAllData(){
 
 // Load all images from IndexedDB on startup
 async function loadImagesFromIDB(){
-  const [savedHero, savedAbout, savedInsta, savedLocImg] = await Promise.all([
+  const [savedHero, savedAbout, savedInsta] = await Promise.all([
     IDB.get('nlf_hero_images', null),
     IDB.get('nlf_about_image', null),
-    IDB.get('nlf_insta_images', null),
-    IDB.get('nlf_location_image', null)
+    IDB.get('nlf_insta_images', null)
   ]);
   if(savedHero) heroImages = savedHero;
   if(savedAbout) aboutImage = savedAbout;
   if(savedInsta) instaImages = savedInsta;
-  if(savedLocImg) locationImage = savedLocImg;
-  locationUrl = DB.get('nlf_location_url', '') || '';
 
   // One-time migration from old localStorage images
   const oldHero  = DB.get('nlf_hero_images', null);
@@ -1392,6 +1493,8 @@ async function loadImagesFromIDB(){
   if(oldHero  && !savedHero)  { heroImages  = oldHero;  await IDB.set('nlf_hero_images',  heroImages);  DB.del('nlf_hero_images'); }
   if(oldAbout && !savedAbout) { aboutImage  = oldAbout; await IDB.set('nlf_about_image',  aboutImage);  DB.del('nlf_about_image'); }
   if(oldInsta && !savedInsta) { instaImages = oldInsta; await IDB.set('nlf_insta_images', instaImages); DB.del('nlf_insta_images'); }
+  // Clear old location image keys if present
+  DB.del('nlf_location_image'); DB.del('nlf_location_url');
 
   // Load product images stored separately in IDB
   const prodImgs = await IDB.get('nlf_product_images', null);
@@ -1429,6 +1532,13 @@ document.querySelectorAll('a,button,.cat-pill,.product-card').forEach(el=>{
 window.addEventListener('scroll',()=>{
   document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
 });
+// Show mobile admin button when hamburger is visible
+function updateMobileAdminBtn(){
+  const btn = document.getElementById('mobileAdminBtn');
+  if(btn) btn.style.display = window.innerWidth <= 900 ? 'block' : 'none';
+}
+updateMobileAdminBtn();
+window.addEventListener('resize', updateMobileAdminBtn);
 function scrollTop(){window.scrollTo({top:0,behavior:'smooth'})}
 
 // ═══════════════════════════════════════
@@ -1744,15 +1854,32 @@ function showAdminPanel(){
 // ═══════════════════════════════════════
 // ADMIN TABS
 // ═══════════════════════════════════════
+const TAB_LABELS = {dashboard:'📊 Dashboard',products:'📦 Products',addProduct:'➕ Add Product',orders:'🛒 Orders',banners:'🖼️ Banners',settings:'⚙️ Settings'};
 function switchTab(id,el){
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
   if(id==='products') renderAdminProducts();
-  if(id==='orders') renderOrders();
+  if(id==='orders') {renderOrders();renderAnnouncementsList();}
   if(id==='dashboard') refreshDashboard();
-  if(id==='settings') renderAdminUsers();
+  if(id==='settings') {renderAdminUsers();loadSettings();}
+  if(id==='banners') {renderHeroBanners();renderInstaPreviews();renderAboutImage();renderMapPlaceholder();setTimeout(initAdminMapPicker,200);}
+  // Mobile: show back button + section label
+  const isMobile = window.innerWidth <= 900;
+  const backBtn = document.getElementById('adminBackBtn');
+  const titleEl = document.getElementById('adminPanelTitle');
+  if(backBtn) backBtn.style.display = (isMobile && id !== 'dashboard') ? 'flex' : 'none';
+  if(titleEl) {
+    const biz = (businessSettings.bizName || 'Admin').split(' ').slice(0,2).join(' ');
+    titleEl.innerHTML = (isMobile && id !== 'dashboard') ? (TAB_LABELS[id] || id) : (biz + ' <span>Admin</span>');
+  }
+}
+function adminGoBack(){
+  const dashBtn = document.querySelector('.admin-tab');
+  switchTab('dashboard', dashBtn);
+  const tabs = document.querySelector('.admin-tabs');
+  if(tabs) tabs.scrollLeft = 0;
 }
 
 // ═══════════════════════════════════════
@@ -2026,65 +2153,131 @@ function renderAboutImage(){
   if(preview) preview.innerHTML = aboutImage ? `<div style="display:flex;gap:0.6rem;align-items:center"><img src="${aboutImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeAboutImage()">Remove</button></div>` : '<div style="color:var(--text-muted)">No about image</div>';
 }
 
+// ─── SITE MAP (public-facing contact section) ───────────────
+let siteMapInstance = null;
+let siteMapMarker = null;
+
 function renderMapPlaceholder(){
-  const el = document.getElementById('mapPlaceholder');
-  if(!el) return;
-  if(locationImage){
-    const href = locationUrl || '#contact';
-    el.innerHTML = `
-      <a class="map-img-card" href="${href}" target="${locationUrl?'_blank':'_self'}">
-        <img src="${locationImage}" alt="Store Location">
-        <div class="map-img-overlay">
-          <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;font-weight:300;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.5)">${businessSettings.address || ''}</p>
-          <span class="map-btn">📍 Open in Google Maps</span>
-        </div>
-      </a>`;
-  } else {
-    const mapsQ = encodeURIComponent(businessSettings.address || 'Westlands Square Nairobi');
-    el.innerHTML = `
-      <div style="font-size:3.5rem">📍</div>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--dark-brown);text-align:center">${(businessSettings.address||'Westlands Square, Ring Road, Nairobi').replace(/,([^,]*)$/,'<br>$1')}</p>
-      <p style="font-size:0.85rem;color:var(--text-muted);text-align:center">Open 7 days a week</p>
-      <a class="map-btn" href="https://maps.google.com/?q=${mapsQ}" target="_blank">📍 Open in Google Maps</a>`;
+  const pinned = DB.get('nlf_pinned_location', null);
+  const mapEl = document.getElementById('siteMap');
+  if(!mapEl) return;
+
+  const defaultLat = -1.2699, defaultLng = 36.8077; // Westlands, Nairobi
+  const lat = pinned ? pinned.lat : defaultLat;
+  const lng = pinned ? pinned.lng : defaultLng;
+  const label = pinned ? (pinned.label || businessSettings.address || '') : (businessSettings.address || 'Westlands Square, Nairobi');
+
+  // Init or update Leaflet map
+  if(!siteMapInstance){
+    siteMapInstance = L.map(mapEl, {zoomControl:true, scrollWheelZoom:false, dragging:true, tap:false});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom:19
+    }).addTo(siteMapInstance);
   }
-  // Update admin preview
-  const locPrev = document.getElementById('locationPreview');
-  if(locPrev){
-    locPrev.innerHTML = locationImage
-      ? `<div style="display:flex;gap:0.6rem;align-items:center;margin-top:0.5rem"><img src="${locationImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeLocationImage()">Remove</button></div>`
-      : '<div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.4rem">No image set — showing address card</div>';
+
+  siteMapInstance.setView([lat, lng], 16);
+
+  if(siteMapMarker) siteMapInstance.removeLayer(siteMapMarker);
+
+  const icon = L.divIcon({
+    html:`<div style="background:var(--gold,#b8936a);width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35)"></div>`,
+    className:'',iconSize:[18,18],iconAnchor:[9,18],popupAnchor:[0,-20]
+  });
+
+  siteMapMarker = L.marker([lat, lng], {icon}).addTo(siteMapInstance);
+  siteMapMarker.bindPopup(`<strong style="font-family:serif;font-size:1rem">${label}</strong><br><a href="https://maps.google.com/?q=${lat},${lng}" target="_blank" style="color:#b8936a;font-size:0.82rem">Open in Google Maps ↗</a>`, {maxWidth:220}).openPopup();
+
+  // Resize fix
+  setTimeout(()=>siteMapInstance.invalidateSize(),200);
+}
+
+// ─── ADMIN MAP PICKER ───────────────────────────────────────
+let adminMapInstance = null;
+let adminPickedMarker = null;
+let adminPickedLatLng = null;
+
+function initAdminMapPicker(){
+  const el = document.getElementById('adminMapPicker');
+  if(!el || adminMapInstance) return;
+
+  const pinned = DB.get('nlf_pinned_location', null);
+  const lat = pinned ? pinned.lat : -1.2699;
+  const lng = pinned ? pinned.lng : 36.8077;
+
+  adminMapInstance = L.map(el, {zoomControl:true, scrollWheelZoom:true});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>',maxZoom:19
+  }).addTo(adminMapInstance);
+  adminMapInstance.setView([lat, lng], 15);
+
+  if(pinned){
+    adminPickedLatLng = {lat:pinned.lat, lng:pinned.lng};
+    adminPickedMarker = L.marker([pinned.lat, pinned.lng]).addTo(adminMapInstance);
+    showPinInfo(pinned.lat, pinned.lng, pinned.label);
   }
+
+  adminMapInstance.on('click', function(e){
+    adminPickedLatLng = {lat:e.latlng.lat, lng:e.latlng.lng};
+    if(adminPickedMarker) adminMapInstance.removeLayer(adminPickedMarker);
+    adminPickedMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(adminMapInstance);
+    // Reverse geocode
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&format=json`)
+      .then(r=>r.json()).then(d=>{
+        const addr = d.display_name || `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
+        showPinInfo(e.latlng.lat, e.latlng.lng, addr);
+      }).catch(()=>{
+        showPinInfo(e.latlng.lat, e.latlng.lng, `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`);
+      });
+  });
+
+  setTimeout(()=>adminMapInstance.invalidateSize(),300);
 }
 
-function handleLocationUpload(files){
-  if(!files||!files[0]) return;
-  const f=files[0]; if(!f.type.startsWith('image/')) return;
-  const r=new FileReader();
-  r.onload=async e=>{
-    locationImage=e.target.result;
-    renderMapPlaceholder();
-    const saved = await IDB.set('nlf_location_image', locationImage);
-    if(!saved) showMsg('bannerMsg','⚠️ Unable to save location image.','error');
-    else showMsg('bannerMsg','✅ Location image saved!','success');
-    logActivity('📍 Uploaded location image');
-  };
-  r.readAsDataURL(f);
+function showPinInfo(lat,lng,label){
+  const el = document.getElementById('pinnedLocationInfo');
+  const btn = document.getElementById('savePinBtn');
+  if(el){ el.style.display='block'; el.innerHTML=`📍 <strong>${label}</strong><br><span style="opacity:0.6">${lat.toFixed(5)}, ${lng.toFixed(5)}</span>`; }
+  if(btn){ btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
 }
 
-async function removeLocationImage(){
-  if(!confirm('Remove location image?')) return;
-  locationImage=null;
+function searchLocation(){
+  const q = document.getElementById('locationSearchInput')?.value?.trim();
+  if(!q || !adminMapInstance) return;
+  fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`)
+    .then(r=>r.json()).then(data=>{
+      if(!data.length){ showMsg('bannerMsg','⚠️ Location not found. Try a more specific address.','error'); return; }
+      const {lat,lon,display_name} = data[0];
+      const latN = parseFloat(lat), lngN = parseFloat(lon);
+      adminMapInstance.setView([latN,lngN],16);
+      adminPickedLatLng = {lat:latN, lng:lngN};
+      if(adminPickedMarker) adminMapInstance.removeLayer(adminPickedMarker);
+      adminPickedMarker = L.marker([latN,lngN]).addTo(adminMapInstance);
+      showPinInfo(latN, lngN, display_name);
+    }).catch(()=>showMsg('bannerMsg','⚠️ Search failed. Check your connection.','error'));
+}
+
+function savePinnedLocation(){
+  if(!adminPickedLatLng){ showMsg('bannerMsg','⚠️ Click on the map to drop a pin first.','error'); return; }
+  const label = document.getElementById('locationSearchInput')?.value?.trim() || businessSettings.address || '';
+  const pin = {lat:adminPickedLatLng.lat, lng:adminPickedLatLng.lng, label};
+  DB.set('nlf_pinned_location', pin);
   renderMapPlaceholder();
-  await IDB.set('nlf_location_image', null);
-  showMsg('bannerMsg','✅ Location image removed.','success');
-  logActivity('🗑️ Removed location image');
+  showMsg('bannerMsg','✅ Location pinned and live on site!','success');
+  logActivity('📍 Pinned store location');
 }
 
-function saveLocationUrl(){
-  locationUrl = document.getElementById('setLocationUrl').value.trim();
-  DB.set('nlf_location_url', locationUrl);
+function clearPinnedLocation(){
+  if(!confirm('Clear the pinned location? Map will return to default.')) return;
+  DB.del('nlf_pinned_location');
+  adminPickedLatLng = null;
+  if(adminPickedMarker && adminMapInstance){ adminMapInstance.removeLayer(adminPickedMarker); adminPickedMarker=null; }
+  const el=document.getElementById('pinnedLocationInfo');
+  const btn=document.getElementById('savePinBtn');
+  if(el) el.style.display='none';
+  if(btn){btn.style.opacity='0.5';btn.style.pointerEvents='none';}
   renderMapPlaceholder();
-  showMsg('bannerMsg','✅ Map link saved!','success');
+  showMsg('bannerMsg','✅ Location pin cleared.','success');
 }
 
 function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=async e=>{ aboutImage=e.target.result; renderAboutImage(); const saved = await IDB.set('nlf_about_image', aboutImage); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save about image. Try a smaller file.','error'); else showMsg('bannerMsg','✅ About image uploaded and saved!','success'); logActivity('🖼️ Uploaded about image'); }; r.readAsDataURL(f); }
@@ -2254,8 +2447,6 @@ function loadSettings(){
   document.getElementById('setAddress').value=businessSettings.address||'';
   document.getElementById('setHoursWD').value=businessSettings.hoursWD||'';
   document.getElementById('setHoursWE').value=businessSettings.hoursWE||'';
-  const locEl=document.getElementById('setLocationUrl');
-  if(locEl) locEl.value = locationUrl || '';
   renderMapPlaceholder();
 }
 
@@ -2415,11 +2606,8 @@ function resetToDefaults(){
   IDB.set('nlf_about_image', null);
   IDB.set('nlf_insta_images', []);
   IDB.set('nlf_product_images', {});
-  IDB.set('nlf_location_image', null);
-  DB.del('nlf_location_url');
+  DB.del('nlf_pinned_location');
   loadSettings();
-  locationImage=null;
-  locationUrl='';
   renderHeroBanners();
   renderInstaGrid();
   renderInstaPreviews();
