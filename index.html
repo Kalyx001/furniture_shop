@@ -253,10 +253,16 @@ section.content{padding:6rem 8%}
 .contact-icon{width:44px;height:44px;border-radius:12px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .contact-item h4{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.2rem}
 .contact-item p,.contact-item a{font-size:0.92rem;color:var(--dark-brown);text-decoration:none;font-weight:400}
-.map-placeholder{border-radius:20px;overflow:hidden;border:1px solid var(--border);height:420px;background:linear-gradient(135deg,var(--cream),var(--wood-light));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem}
+.map-placeholder{border-radius:20px;overflow:hidden;border:1px solid var(--border);height:420px;background:linear-gradient(135deg,var(--cream),var(--wood-light));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;position:relative}
 .map-placeholder p{font-size:0.85rem;color:var(--text-muted);text-align:center;line-height:1.7;max-width:220px}
 .map-btn{background:var(--dark-brown);color:var(--cream);padding:0.7rem 1.6rem;border-radius:2rem;font-size:0.82rem;text-decoration:none;transition:all 0.2s;font-weight:500}
 .map-btn:hover{background:var(--gold)}
+.map-img-card{width:100%;height:100%;position:relative;cursor:pointer;display:block;text-decoration:none}
+.map-img-card img{width:100%;height:100%;object-fit:cover;display:block}
+.map-img-overlay{position:absolute;inset:0;background:rgba(26,22,18,0.38);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;transition:background 0.3s}
+.map-img-card:hover .map-img-overlay{background:rgba(26,22,18,0.52)}
+.map-img-overlay .map-btn{pointer-events:none}
+.map-img-overlay p{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#fff;text-align:center;font-weight:300;pointer-events:none}
 
 /* NEWSLETTER */
 #newsletter{background:linear-gradient(135deg,var(--dark-brown) 0%,var(--mid-brown) 100%);padding:5rem 8%;text-align:center}
@@ -826,11 +832,8 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
       <a class="btn-outline" href="tel:+254700000000">📞 Call Us Now</a>
     </div>
   </div>
-  <div class="map-placeholder fade-right">
-    <div style="font-size:3.5rem">📍</div>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--dark-brown);text-align:center">Westlands Square<br>Ring Road, Nairobi</p>
-    <p>1st Floor, Unit 12<br>Open 7 days a week</p>
-    <a class="map-btn" href="https://maps.google.com/?q=Westlands+Square+Nairobi" target="_blank">📍 Open in Google Maps</a>
+  <div class="map-placeholder fade-right" id="mapPlaceholder">
+    <!-- Rendered by renderMapPlaceholder() -->
   </div>
 </section>
 
@@ -1147,6 +1150,17 @@ footer{background:var(--black);color:rgba(245,240,232,0.6);padding:4rem 8% 2rem}
               <div id="aboutPreview" style="margin-top:0.6rem"></div>
             </div>
             <div>
+              <label style="font-size:0.78rem;color:var(--text-muted)">📍 Location / Map Image</label>
+              <p style="font-size:0.74rem;color:var(--text-muted);margin:0.3rem 0 0.6rem">Upload a screenshot or photo of your store location. It replaces the address card in the Contact section and becomes clickable.</p>
+              <div class="img-upload-area"><input type="file" accept="image/*" onchange="handleLocationUpload(this.files)"><div class="img-upload-text">Upload map screenshot or store photo</div></div>
+              <div id="locationPreview" style="margin-top:0.6rem"></div>
+              <div style="margin-top:0.8rem;display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap">
+                <input style="flex:1;min-width:200px;background:rgba(255,255,255,0.05);border:1px solid var(--admin-border);border-radius:8px;padding:0.6rem 0.9rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none" type="url" id="setLocationUrl" placeholder="Google Maps link (https://maps.google.com/…)">
+                <button class="admin-btn secondary" onclick="saveLocationUrl()" style="white-space:nowrap">💾 Save Link</button>
+              </div>
+              <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem">Paste your Google Maps share link above — clicking the image will open it.</p>
+            </div>
+            <div>
               <label style="font-size:0.78rem;color:var(--text-muted)">Instagram Gallery (up to 6)</label>
               <div class="img-upload-area"><input type="file" accept="image/*" multiple onchange="handleInstaFiles(this.files)"><div class="img-upload-text">Upload multiple images for the Insta grid</div></div>
               <div class="img-preview-grid" id="instaPreviewGrid" style="margin-top:0.6rem"></div>
@@ -1344,6 +1358,8 @@ let modalImgList = [];
 let heroImages = {0:null,1:null,2:null,3:null};
 let instaImages = [];
 let aboutImage = null;
+let locationImage = null;
+let locationUrl = '';
 
 function saveAllData(){
   // Save products without images to keep localStorage lean
@@ -1357,14 +1373,17 @@ function saveAllData(){
 
 // Load all images from IndexedDB on startup
 async function loadImagesFromIDB(){
-  const [savedHero, savedAbout, savedInsta] = await Promise.all([
+  const [savedHero, savedAbout, savedInsta, savedLocImg] = await Promise.all([
     IDB.get('nlf_hero_images', null),
     IDB.get('nlf_about_image', null),
-    IDB.get('nlf_insta_images', null)
+    IDB.get('nlf_insta_images', null),
+    IDB.get('nlf_location_image', null)
   ]);
   if(savedHero) heroImages = savedHero;
   if(savedAbout) aboutImage = savedAbout;
   if(savedInsta) instaImages = savedInsta;
+  if(savedLocImg) locationImage = savedLocImg;
+  locationUrl = DB.get('nlf_location_url', '') || '';
 
   // One-time migration from old localStorage images
   const oldHero  = DB.get('nlf_hero_images', null);
@@ -1385,6 +1404,7 @@ async function loadImagesFromIDB(){
   renderInstaGrid();
   renderInstaPreviews();
   renderAboutImage();
+  renderMapPlaceholder();
   renderProducts();
   renderAdminProducts();
 }
@@ -1937,24 +1957,25 @@ function removeImg(i){uploadedImages.splice(i,1);renderImgPreviews()}
 // HERO / ABOUT / INSTA IMAGE HELPERS (admin-uploaded banners)
 function renderHeroBanners(){
   for(let i=0;i<4;i++){
-    const imgEl=document.getElementById('heroImg'+i);
     const heroSlide=document.getElementById('slide'+i);
     const heroRight=heroSlide?.querySelector('.hero-right');
-    const emojiEl=heroSlide?.querySelector('.hero-emoji');
+    const heroVisual=heroSlide?.querySelector('.hero-visual');
+    const heroBadge=heroSlide?.querySelector('.hero-badge');
     const defaultBg = heroRight?.dataset.defaultBg || '';
     const src = heroImages && heroImages[i] ? heroImages[i] : null;
     if(heroRight){
       if(src){
-        heroRight.style.backgroundImage = `${defaultBg ? defaultBg + ',' : ''} url('${src}')`;
+        // Full background image, no overlay content
+        heroRight.style.backgroundImage = `url('${src}')`;
+        heroRight.style.backgroundSize = 'cover';
+        heroRight.style.backgroundPosition = 'center';
+        if(heroVisual) heroVisual.style.display = 'none';
+        if(heroBadge) heroBadge.style.display = 'none';
       } else {
         heroRight.style.backgroundImage = defaultBg;
+        if(heroVisual) heroVisual.style.display = '';
+        if(heroBadge) heroBadge.style.display = '';
       }
-    }
-    if(imgEl){
-      imgEl.style.display='none';
-    }
-    if(emojiEl){
-      emojiEl.style.display = src ? 'none' : 'block';
     }
     const preview=document.getElementById('heroPreview'+i);
     if(preview){
@@ -2003,6 +2024,67 @@ function renderAboutImage(){
   else { if(imgEl) imgEl.style.display='none'; if(emojiEl) emojiEl.style.display='block'; }
   const preview=document.getElementById('aboutPreview');
   if(preview) preview.innerHTML = aboutImage ? `<div style="display:flex;gap:0.6rem;align-items:center"><img src="${aboutImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeAboutImage()">Remove</button></div>` : '<div style="color:var(--text-muted)">No about image</div>';
+}
+
+function renderMapPlaceholder(){
+  const el = document.getElementById('mapPlaceholder');
+  if(!el) return;
+  if(locationImage){
+    const href = locationUrl || '#contact';
+    el.innerHTML = `
+      <a class="map-img-card" href="${href}" target="${locationUrl?'_blank':'_self'}">
+        <img src="${locationImage}" alt="Store Location">
+        <div class="map-img-overlay">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;font-weight:300;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.5)">${businessSettings.address || ''}</p>
+          <span class="map-btn">📍 Open in Google Maps</span>
+        </div>
+      </a>`;
+  } else {
+    const mapsQ = encodeURIComponent(businessSettings.address || 'Westlands Square Nairobi');
+    el.innerHTML = `
+      <div style="font-size:3.5rem">📍</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--dark-brown);text-align:center">${(businessSettings.address||'Westlands Square, Ring Road, Nairobi').replace(/,([^,]*)$/,'<br>$1')}</p>
+      <p style="font-size:0.85rem;color:var(--text-muted);text-align:center">Open 7 days a week</p>
+      <a class="map-btn" href="https://maps.google.com/?q=${mapsQ}" target="_blank">📍 Open in Google Maps</a>`;
+  }
+  // Update admin preview
+  const locPrev = document.getElementById('locationPreview');
+  if(locPrev){
+    locPrev.innerHTML = locationImage
+      ? `<div style="display:flex;gap:0.6rem;align-items:center;margin-top:0.5rem"><img src="${locationImage}" style="width:140px;height:80px;object-fit:cover;border-radius:8px"><button class="tbl-btn del" onclick="removeLocationImage()">Remove</button></div>`
+      : '<div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.4rem">No image set — showing address card</div>';
+  }
+}
+
+function handleLocationUpload(files){
+  if(!files||!files[0]) return;
+  const f=files[0]; if(!f.type.startsWith('image/')) return;
+  const r=new FileReader();
+  r.onload=async e=>{
+    locationImage=e.target.result;
+    renderMapPlaceholder();
+    const saved = await IDB.set('nlf_location_image', locationImage);
+    if(!saved) showMsg('bannerMsg','⚠️ Unable to save location image.','error');
+    else showMsg('bannerMsg','✅ Location image saved!','success');
+    logActivity('📍 Uploaded location image');
+  };
+  r.readAsDataURL(f);
+}
+
+async function removeLocationImage(){
+  if(!confirm('Remove location image?')) return;
+  locationImage=null;
+  renderMapPlaceholder();
+  await IDB.set('nlf_location_image', null);
+  showMsg('bannerMsg','✅ Location image removed.','success');
+  logActivity('🗑️ Removed location image');
+}
+
+function saveLocationUrl(){
+  locationUrl = document.getElementById('setLocationUrl').value.trim();
+  DB.set('nlf_location_url', locationUrl);
+  renderMapPlaceholder();
+  showMsg('bannerMsg','✅ Map link saved!','success');
 }
 
 function handleAboutUpload(files){ if(!files||!files[0]) return; const f=files[0]; if(!f.type.startsWith('image/')) return; const r=new FileReader(); r.onload=async e=>{ aboutImage=e.target.result; renderAboutImage(); const saved = await IDB.set('nlf_about_image', aboutImage); saveAllData(); if(!saved) showMsg('bannerMsg','⚠️ Unable to save about image. Try a smaller file.','error'); else showMsg('bannerMsg','✅ About image uploaded and saved!','success'); logActivity('🖼️ Uploaded about image'); }; r.readAsDataURL(f); }
@@ -2172,6 +2254,9 @@ function loadSettings(){
   document.getElementById('setAddress').value=businessSettings.address||'';
   document.getElementById('setHoursWD').value=businessSettings.hoursWD||'';
   document.getElementById('setHoursWE').value=businessSettings.hoursWE||'';
+  const locEl=document.getElementById('setLocationUrl');
+  if(locEl) locEl.value = locationUrl || '';
+  renderMapPlaceholder();
 }
 
 function applyBizName(){
@@ -2250,6 +2335,7 @@ function saveSettings(){
   };
   DB.set('nlf_settings',businessSettings);
   applyBizName();
+  renderMapPlaceholder();
   showMsg('settingsMsg','✅ Settings saved successfully!','success');
   logActivity('⚙️ Business settings updated');
 }
@@ -2329,11 +2415,16 @@ function resetToDefaults(){
   IDB.set('nlf_about_image', null);
   IDB.set('nlf_insta_images', []);
   IDB.set('nlf_product_images', {});
+  IDB.set('nlf_location_image', null);
+  DB.del('nlf_location_url');
   loadSettings();
+  locationImage=null;
+  locationUrl='';
   renderHeroBanners();
   renderInstaGrid();
   renderInstaPreviews();
   renderAboutImage();
+  renderMapPlaceholder();
   renderProducts();
   renderAdminProducts();
   renderOrders();
