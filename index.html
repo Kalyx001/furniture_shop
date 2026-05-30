@@ -1918,8 +1918,11 @@ function renderInstaGrid(){
   const items = [];
   for(let i=0;i<6;i++){
     const src = instaImages && instaImages[i] ? instaImages[i] : null;
-    if(src){ items.push(`<div class="insta-item" style="overflow:hidden;border-radius:12px"><img src="${src}" style="width:100%;height:100%;object-fit:cover"><div class="insta-overlay">View Post</div></div>`); }
-    else { items.push(`<div class="insta-item" style="background:${defaultBg[i]}">${defaultEmoji[i]}<div class="insta-overlay">View Post</div></div>`); }
+    if(src){
+      items.push(`<div class="insta-item" style="background-image:url('${src}');background-size:cover;background-position:center;border-radius:12px;overflow:hidden"><div class="insta-overlay">View Post</div></div>`);
+    } else {
+      items.push(`<div class="insta-item" style="background:${defaultBg[i]}">${defaultEmoji[i]}<div class="insta-overlay">View Post</div></div>`);
+    }
   }
   if(container) container.innerHTML=items.join('');
 }
@@ -2068,6 +2071,70 @@ function loadSettings(){
   document.getElementById('setHoursWE').value=businessSettings.hoursWE||'';
 }
 
+function applyBizName(){
+  const name = businessSettings.bizName || 'Nairobi Luxe Furniture';
+  // Split into parts: everything before last word = brand, last word = accent
+  const parts = name.trim().split(/\s+/);
+  const lastWord = parts.pop();
+  const firstPart = parts.join(' ');
+  const full = name;
+  // Helper to build styled logo HTML
+  const logoHtml = (first, last) => first ? `${first} <span>${last}</span>` : `<span>${last}</span>`;
+
+  // Page title
+  document.title = full + ' – Crafted for Your Space';
+
+  // Preloader
+  const pre = document.querySelector('.pre-logo');
+  if(pre) pre.textContent = full;
+
+  // Nav logo
+  const navLogo = document.querySelector('.nav-logo');
+  if(navLogo) navLogo.innerHTML = logoHtml(firstPart, lastWord);
+
+  // Footer logo
+  const footerLogo = document.querySelector('.footer-logo');
+  if(footerLogo) footerLogo.innerHTML = logoHtml(firstPart, lastWord);
+
+  // Admin header title
+  const adminTitle = document.querySelector('.admin-title');
+  if(adminTitle) adminTitle.innerHTML = logoHtml(firstPart, lastWord) + ' — Admin';
+
+  // Auth logo
+  const authLogo = document.querySelector('.auth-logo');
+  if(authLogo) authLogo.innerHTML = logoHtml(firstPart, lastWord);
+
+  // Instagram section header
+  const instaH3 = document.querySelector('#insta .insta-header h3');
+  if(instaH3) instaH3.textContent = 'Follow Us @' + full.replace(/\s+/g,'');
+
+  // Hero "tag" lines that mention the brand
+  document.querySelectorAll('.hero-tag').forEach(el=>{
+    if(el.textContent.includes('Nairobi') || el.textContent.includes('Premium')) {
+      // Only update if it's the generic brand tag, not category tags
+      if(el.textContent.includes("'s Premium") || el.textContent === "Nairobi's Premium Furniture"){
+        el.textContent = full + "'s Premium Furniture";
+      }
+    }
+  });
+
+  // About section subtitle that mentions store name
+  const aboutSub = document.querySelector('#about .section-subtitle');
+  if(aboutSub) aboutSub.innerHTML = aboutSub.innerHTML.replace(/Nairobi Luxe Furniture/g, full);
+
+  // Why section title
+  const whyTitle = document.querySelector('#why .section-title');
+  if(whyTitle) whyTitle.innerHTML = whyTitle.innerHTML.replace(/Nairobi Luxe Difference|[^<]+ Difference/, full + ' Difference');
+
+  // Footer bottom copyright
+  const footerBottom = document.querySelector('.footer-bottom p');
+  if(footerBottom) footerBottom.innerHTML = footerBottom.innerHTML.replace(/© \d+ [^.]+\./, '© ' + new Date().getFullYear() + ' ' + full + '.');
+
+  // Footer brand description
+  const footerBrandP = document.querySelector('.footer-brand p');
+  if(footerBrandP) footerBrandP.innerHTML = footerBrandP.innerHTML.replace(/Nairobi Luxe Furniture/g, full);
+}
+
 function saveSettings(){
   businessSettings={
     bizName:document.getElementById('setBizName').value,
@@ -2079,6 +2146,7 @@ function saveSettings(){
     hoursWE:document.getElementById('setHoursWE').value,
   };
   DB.set('nlf_settings',businessSettings);
+  applyBizName();
   showMsg('settingsMsg','✅ Settings saved successfully!','success');
   logActivity('⚙️ Business settings updated');
 }
@@ -2174,6 +2242,7 @@ function showMsg(id,msg,type='success'){
 
 // Init load
 updateLiveAnnouncementBar();
+applyBizName();
 // Render admin-uploaded banners and images
 renderHeroBanners();
 renderInstaGrid();
